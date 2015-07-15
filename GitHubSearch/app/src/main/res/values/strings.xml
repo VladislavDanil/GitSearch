@@ -3,4 +3,11 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="HeadStartLayout">Поиск репозиториев в GitHub</string>
+    <string name="SearchFormStartLayout">Введите слово для поиска</string>
+    <string name="ButtonStartLayout">Начать поиск</string>
+    <string name="HeadResultLayout">Результаты поиска</string>
+    <string name="ButtonResultLayout">Новый поиск</string>
+    <string name="HeadListElementLayout">Название репозитория</string>
+    <string name="TextAutorNameListElementLayout">Имя автора</string>
 </resources>
