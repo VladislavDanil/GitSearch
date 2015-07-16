@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:id="@+id/listView"
-        android:layout_weight="0.74" />
+        android:layout_weight="0.84" />
 
     <Button
         android:layout_width="wrap_content"
@@ -26,6 +26,6 @@
         android:id="@+id/resultb"
         android:layout_weight="0.02"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp" />
+        android:layout_marginTop="50dp" />
 
 </LinearLayout>
