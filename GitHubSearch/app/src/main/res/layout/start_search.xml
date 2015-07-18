@@ -12,11 +12,12 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/relativeLayout">
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/searcht"
         android:layout_marginTop="42dp"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
@@ -44,9 +45,18 @@
         android:layout_height="wrap_content"
         android:text="@string/ButtonStartLayout"
         android:id="@+id/searchb"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/searcht"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="37dp" />
     </RelativeLayout>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pbar"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp" />
 
 </RelativeLayout>

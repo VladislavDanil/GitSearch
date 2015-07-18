@@ -6,32 +6,83 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.view.View.OnClickListener;
-import com.example.nitrogenium.githubsearch.R;
-/**Класс для создания фрагмента из start_search Layout
- *@author Данилов Владислав*/
-public class FragmentStartSearchLayout extends Fragment {
-    /**объявляю переменную класса FragmentTransaction позволяющего
-     * удалять, добавлять, заменять фрагмент*/
-    private FragmentTransaction transaction;
-    /**объявляю переменную класса Fragment которую в последующем
-     * буду использовать для инициализации фрагмента layout result*/
-    private Fragment fragmentResult;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 
+import github.*;
+import com.example.nitrogenium.githubsearch.R;
+
+import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+/**пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ start_search Layout
+ *@author пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ*/
+public class FragmentStartSearchLayout extends Fragment {
+    /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ FragmentTransaction пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ*/
+    private FragmentTransaction transaction;
+    /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ Fragment пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+     * пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ layout result*/
+    private Fragment fragmentResult;
+    /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ*/
+    public static String searchString;
+    String API = "https://api.github.com";
+    EditText searchText;
+    ProgressBar pbar;
     @Override
-    /**создание фрагмента из layout start_search*/
+    /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ layout start_search*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentStartSearch = inflater.inflate(R.layout.start_search, null);
-        /**инициализация фрагмента FragmentResultLayout*/
-        fragmentResult = new FragmentResultLayout();
-        /**инициализация кнопки searchb из layout start_search*/
+        /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ searchb пїЅпїЅ layout start_search*/
         Button button = (Button) fragmentStartSearch.findViewById(R.id.searchb);
-        /**обработка нажатия кнопки searchb ведет к replace()
-         Заменяет один фрагмент на другой*/
+        /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ searcht пїЅпїЅ layout start_search*/
+        searchText = (EditText) fragmentStartSearch.findViewById(R.id.searcht);
+        pbar = (ProgressBar) fragmentStartSearch.findViewById(R.id.pbar);
+        pbar.setVisibility(View.INVISIBLE);
+        /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ search пїЅпїЅпїЅпїЅпїЅ пїЅ replace()
+         пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ*/
+
         button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+                String user = searchText.getText().toString();
+                pbar.setVisibility(View.VISIBLE);
+                /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ retrofit*/
+                RestAdapter restAdapter = new RestAdapter.Builder()
+                        .setEndpoint(API).build();
+                /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ*/
+                Gitapi git = restAdapter.create(Gitapi.class);
+                //Now ,we need to call for response
+                //Retrofit using gson for JSON-POJO conversion
+
+                git.getFeed(user, new Callback<Gitmodel>() {
+                    @Override
+                    public void success(Gitmodel gitmodel, Response response) {
+                        //we get json object from github server to our POJO or model class
+
+                       searchString = ("Github Name :" + gitmodel.getName() + "\nWebsite :" + gitmodel.getBlog() + "\nCompany Name :" + gitmodel.getCompany());
+
+                        pbar.setVisibility(View.INVISIBLE);                               //disable progressbar
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        searchString ="Р РµР·СѓР»СЊС‚Р°С‚РѕРІ РЅРµС‚!";
+                        pbar.setVisibility(View.INVISIBLE);                               //disable progressbar
+                    }
+                });
+                // РїРѕР»СѓС‡Р°РµРј СЌРєР·РµРјРїР»СЏСЂ СЌР»РµРјРµРЅС‚Р° ListView
+
+                /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ FragmentResultLayout*/
+                fragmentResult = new FragmentResultLayout();
                 transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, fragmentResult);
                 transaction.addToBackStack(null);

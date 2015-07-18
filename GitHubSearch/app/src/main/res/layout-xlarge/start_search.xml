@@ -12,7 +12,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/searcht"
         android:layout_marginTop="42dp"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:text="@string/ButtonStartLayout"
         android:id="@+id/button"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/searcht"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="37dp" />
 

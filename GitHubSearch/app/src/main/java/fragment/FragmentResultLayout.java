@@ -6,31 +6,41 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+
 import com.example.nitrogenium.githubsearch.R;
-/**Класс для создания фрагмента из result Layout
- *@author Данилов Владислав*/
+/**пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ result Layout
+ *@author пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ*/
 public class FragmentResultLayout extends Fragment {
-    /**объявляю переменную класса FragmentTransaction позволяющего
-     * удалять, добавлять, заменять фрагмент*/
+    /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ FragmentTransaction пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+     * пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ*/
     private FragmentTransaction transaction;
-    /**объявляю переменную класса Fragment которую в последующем
-     * буду использовать для инициализации фрагмента layout start_search*/
+    /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ Fragment пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+     * пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ layout start_search*/
     private Fragment fragmentStartSearch;
 
     @Override
-    /**создание фрагмента из layout result*/
+    /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ layout result*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentResult = inflater.inflate(R.layout.result, null);
-        /**инициализация фрагмента FragmentStartSearchLayout*/
+        /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ FragmentStartSearchLayout*/
         fragmentStartSearch = new FragmentStartSearchLayout();
-        /**инициализация кнопки resultb из layout result*/
+        /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ resultb пїЅпїЅ layout result*/
         Button button = (Button) fragmentResult.findViewById(R.id.resultb);
-        /**обработка нажатия кнопки resultb ведет к replace()
-         Заменяет один фрагмент на другой*/
+        /**пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ resultb пїЅпїЅпїЅпїЅпїЅ пїЅ replace()
+         пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ*/
+        // РїРѕР»СѓС‡Р°РµРј СЌРєР·РµРјРїР»СЏСЂ СЌР»РµРјРµРЅС‚Р° ListView
+        ListView listView = (ListView) fragmentResult.findViewById(R.id.listView);
+        String[] resultGit ={FragmentStartSearchLayout.searchString};
+        ArrayAdapter<String> adapter;
+        adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, resultGit);
+        listView.setAdapter(adapter);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment, fragmentStartSearch);
                 transaction.addToBackStack(null);

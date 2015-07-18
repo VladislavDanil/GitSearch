@@ -10,7 +10,7 @@ import fragment.FragmentStartSearchLayout;
 
 /** ласс инициализирует главную активность
  *@author ƒанилов ¬ладислав*/
-class MainActivity extends Activity {
+public class MainActivity extends Activity {
     /**объ€вл€ю переменную класса Fragment которую в последующем
      * буду использовать дл€ инициализации фрагмента layout result*/
     private Fragment fragmentStartSearch;
