@@ -53,17 +53,24 @@ public class FragmentStartSearchLayout extends Fragment {
 
         button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                String user = searchText.getText().toString();
+                final String user = searchText.getText().toString();
                 pbar.setVisibility(View.VISIBLE);
                 /**���������� ������ � retrofit*/
                 RestAdapter restAdapter = new RestAdapter.Builder()
                         .setEndpoint(API).build();
                 /**�������� �������� ��� ������ � �����*/
-                Gitapi git = restAdapter.create(Gitapi.class);
+                final Gitapi git = restAdapter.create(Gitapi.class);
+                Thread t = new Thread(new Runnable(){
+                    public void run(){
+                        Gitmodel r = git.getFeed(user);
+                        searchString = ("Github Name :" + r.getName() + "\nWebsite :" + r.getBlog() + "\nCompany Name :" + r.getCompany());
+                    }
+                });
+                t.start();
                 //Now ,we need to call for response
                 //Retrofit using gson for JSON-POJO conversion
 
-                git.getFeed(user, new Callback<Gitmodel>() {
+                /*git.getFeed(user, new Callback<Gitmodel>() {
                     @Override
                     public void success(Gitmodel gitmodel, Response response) {
                         //we get json object from github server to our POJO or model class
@@ -78,7 +85,7 @@ public class FragmentStartSearchLayout extends Fragment {
                         searchString ="Результатов нет!";
                         pbar.setVisibility(View.INVISIBLE);                               //disable progressbar
                     }
-                });
+                });*/
                 // получаем экземпляр элемента ListView
 
                 /**������������� ��������� FragmentResultLayout*/
