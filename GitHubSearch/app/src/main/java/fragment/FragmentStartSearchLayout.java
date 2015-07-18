@@ -33,7 +33,7 @@ public class FragmentStartSearchLayout extends Fragment {
      * ���� ������������ ��� ������������� ��������� layout result*/
     private Fragment fragmentResult;
     /**���������� ������ �������� ����������� ������� � ����������������� ����*/
-    public static String searchString;
+    public static String searchString = "start var";
     String API = "https://api.github.com";
     EditText searchText;
     ProgressBar pbar;
@@ -53,22 +53,28 @@ public class FragmentStartSearchLayout extends Fragment {
 
         button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                final String user = searchText.getText().toString();
+
                 pbar.setVisibility(View.VISIBLE);
-                /**���������� ������ � retrofit*/
-                RestAdapter restAdapter = new RestAdapter.Builder()
-                        .setEndpoint(API).build();
-                /**�������� �������� ��� ������ � �����*/
-                final Gitapi git = restAdapter.create(Gitapi.class);
                 Thread t = new Thread(new Runnable(){
                     public void run(){
-                        Gitmodel r = git.getFeed(user);
-                        searchString = ("Github Name :" + r.getName() + "\nWebsite :" + r.getBlog() + "\nCompany Name :" + r.getCompany());
+                        String user = searchText.getText().toString();
+                        /**���������� ������ � retrofit*/
+                        RestAdapter restAdapter = new RestAdapter.Builder()
+                                .setEndpoint(API).build();
+                        /**�������� �������� ��� ������ � �����*/
+                        Gitapi git = restAdapter.create(Gitapi.class);
+                        Gitmodel r = null;
+                        try {
+                            r = git.getFeed(user);
+                            searchString = ("Github Name :" + r.getName() + "\nWebsite :" + r.getBlog() + "\nCompany Name :" + r.getCompany());
+                        }catch (RetrofitError error){
+                            searchString ="Ошибка 404";
+                            pbar.setVisibility(View.INVISIBLE);
+                        }
+                        pbar.setVisibility(View.INVISIBLE);
                     }
                 });
                 t.start();
-                //Now ,we need to call for response
-                //Retrofit using gson for JSON-POJO conversion
 
                 /*git.getFeed(user, new Callback<Gitmodel>() {
                     @Override
@@ -86,7 +92,6 @@ public class FragmentStartSearchLayout extends Fragment {
                         pbar.setVisibility(View.INVISIBLE);                               //disable progressbar
                     }
                 });*/
-                // получаем экземпляр элемента ListView
 
                 /**������������� ��������� FragmentResultLayout*/
                 fragmentResult = new FragmentResultLayout();
