@@ -55,18 +55,22 @@ public class FragmentStartSearchLayout extends Fragment {
             public void onClick(View v) {
 
                 pbar.setVisibility(View.VISIBLE);
-                Thread t = new Thread(new Runnable(){
+                RestAdapter restAdapter = new RestAdapter.Builder()
+                        .setEndpoint(API).build();
+                Gitapi git = restAdapter.create(Gitapi.class);
+                String stringSearch = searchText.getText().toString();
+               /* Thread t = new Thread(new Runnable(){
                     public void run(){
                         String user = searchText.getText().toString();
-                        /**���������� ������ � retrofit*/
+                        *//**���������� ������ � retrofit*//*
                         RestAdapter restAdapter = new RestAdapter.Builder()
                                 .setEndpoint(API).build();
-                        /**�������� �������� ��� ������ � �����*/
+                        *//**�������� �������� ��� ������ � �����*//*
                         Gitapi git = restAdapter.create(Gitapi.class);
                         Gitmodel r = null;
                         try {
                             r = git.getFeed(user);
-                            searchString = ("Github Name :" + r.getName() + "\nWebsite :" + r.getBlog() + "\nCompany Name :" + r.getCompany());
+                            searchString = ("Github Name :" + r.getName());
                         }catch (RetrofitError error){
                             searchString ="Ошибка 404";
                             pbar.setVisibility(View.INVISIBLE);
@@ -74,24 +78,24 @@ public class FragmentStartSearchLayout extends Fragment {
                         pbar.setVisibility(View.INVISIBLE);
                     }
                 });
-                t.start();
+                t.start();*/
 
-                /*git.getFeed(user, new Callback<Gitmodel>() {
+                git.getFeed((stringSearch+"+in:description+in:name"), new Callback<Gitmodel>() {
                     @Override
                     public void success(Gitmodel gitmodel, Response response) {
                         //we get json object from github server to our POJO or model class
 
-                       searchString = ("Github Name :" + gitmodel.getName() + "\nWebsite :" + gitmodel.getBlog() + "\nCompany Name :" + gitmodel.getCompany());
+                        searchString = ("Github Name :" + gitmodel.getName()+ gitmodel.getDescription());
 
                         pbar.setVisibility(View.INVISIBLE);                               //disable progressbar
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        searchString ="Результатов нет!";
+                        searchString = error.toString();
                         pbar.setVisibility(View.INVISIBLE);                               //disable progressbar
                     }
-                });*/
+                });
 
                 /**������������� ��������� FragmentResultLayout*/
                 fragmentResult = new FragmentResultLayout();
