@@ -15,6 +15,8 @@ import github.*;
 
 import com.example.nitrogenium.githubsearch.R;
 
+import java.util.ArrayList;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -39,7 +41,7 @@ public class FragmentStartSearchLayout extends Fragment {
     /**
      * объявление статической переменной содержащей ответ на запрос от сервера github
      */
-    public static String searchString = "";
+    public static ArrayList<Item> itemArrayList;
     String API = "https://api.github.com";
     /**
      * объявление поля ввода для значения поиска
@@ -63,7 +65,8 @@ public class FragmentStartSearchLayout extends Fragment {
 
         button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-/**делает видимым ProgressBar в начале запроса*/
+
+                /**делает видимым ProgressBar в начале запроса*/
                 pbar.setVisibility(View.VISIBLE);
                 /**инициализирует переменную для доступа к серверу*/
                 RestAdapter restAdapter = new RestAdapter.Builder()
@@ -73,31 +76,30 @@ public class FragmentStartSearchLayout extends Fragment {
                 /**преобразует значение поля ввода в строку для использования в запросе*/
                 String stringSearch = searchText.getText().toString();
                 /**инициализация интерфейса и метода для запроса*/
-                git.getFeed((stringSearch + "+in:description+in:name"), new Callback<Gitmodel>() {
+                git.getFeed((stringSearch + "+in:description+in:name"), new Callback<Example>() {
                     @Override
-                    public void success(Gitmodel gitmodel, Response response) {
+                    public void success(Example gitmodel, Response response) {
                         /** преобразование json в объектную модель*/
-                        searchString = ("Github Name :" + gitmodel.getName() + gitmodel.getDescription());
+                        itemArrayList = gitmodel.getItems();
                         /** делает невидимым ProgressBar при окончании запроса*/
                         pbar.setVisibility(View.INVISIBLE);
+                        /**инициализация объекта FragmentResultLayout для перехода между фрагментами*/
+                        fragmentResult = new FragmentResultLayout();
+                        transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment, fragmentResult);
+                        /**добавление в стек фрагментов для кнопки back*/
+                        transaction.addToBackStack(null);
+                        transaction.commit();
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
-                        /**присвоение строке данных ошибки запроса*/
-                        searchString = error.toString();
+                        android.util.Log.v("tag", error.toString());
                         /** делает невидимым ProgressBar при выводе ошибки*/
                         pbar.setVisibility(View.INVISIBLE);
                     }
                 });
 
-                /**инициализация объекта FragmentResultLayout для перехода между фрагментами*/
-                fragmentResult = new FragmentResultLayout();
-                transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment, fragmentResult);
-                /**добавление в стек фрагментов для кнопки back*/
-                transaction.addToBackStack(null);
-                transaction.commit();
             }
         });
 

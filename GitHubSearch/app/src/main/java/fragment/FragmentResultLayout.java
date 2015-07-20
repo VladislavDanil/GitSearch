@@ -12,6 +12,10 @@ import android.widget.ListView;
 
 import com.example.nitrogenium.githubsearch.R;
 
+import java.util.ArrayList;
+
+import github.Item;
+
 /**
  * Класс реализует фрагмент из result Layout и при нажатии кнопки позволяет переходить
  * к strart_searh Layout
@@ -40,7 +44,10 @@ public class FragmentResultLayout extends Fragment {
         /**получаем экземпляр элемента ListView*/
         ListView listView = (ListView) fragmentResult.findViewById(R.id.listView);
         /**запись результатов из статической переменной в массив*/
-        String[] resultGit = {FragmentStartSearchLayout.searchString};
+        ArrayList<String> resultGit=new ArrayList<String>();
+        for (Item item : FragmentStartSearchLayout.itemArrayList) {
+                resultGit.add("Name: " + item.getName() + "\n" + "Description: " + item.getDescription());
+        }
         ArrayAdapter<String> adapter;
         /**вывод данных в список во встроенный адаптер*/
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, resultGit);
