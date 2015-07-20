@@ -6,7 +6,16 @@ import retrofit.http.GET;
 import retrofit.http.Path;
 import retrofit.http.Query;
 
+/**
+ * Интерфейс для запроса к серверу github
+ *
+ * @author Данилов Владислав
+ */
 public interface Gitapi {
-    @GET("/search/repositories?sort=stars&order=desc")      //here is the other url part.best way is to start using /
-    public void getFeed(@Query("q")String stringSearch,Callback<Gitmodel> response);     //string user is for passing values from edittext for eg: user=basil2style,google
+    /**
+     * get запрос к серверу github
+     */
+    @GET("/search/repositories?sort=stars&order=desc")
+    /**метод, на входе получает строку и подставляет ее в запрос*/
+    public void getFeed(@Query("q") String stringSearch, Callback<Gitmodel> response);
 }

@@ -11,33 +11,42 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.nitrogenium.githubsearch.R;
-/**����� ��� �������� ��������� �� result Layout
- *@author ������� ���������*/
+
+/**
+ * Класс реализует фрагмент из result Layout и при нажатии кнопки позволяет переходить
+ * к strart_searh Layout
+ * кроме того реализует вывод данныхв список на экран
+ *
+ * @author Данилов Владислав
+ */
 public class FragmentResultLayout extends Fragment {
-    /**�������� ���������� ������ FragmentTransaction ������������
-     * �������, ���������, �������� ��������*/
+    /**
+     * объявление переменной для перехода между фрагментами FragmentTransaction
+     */
     private FragmentTransaction transaction;
-    /**�������� ���������� ������ Fragment ������� � �����������
-     * ���� ������������ ��� ������������� ��������� layout start_search*/
+    /**
+     * объявление фрагмента�layout start_search для дальнейшего использования при переходе
+     */
     private Fragment fragmentStartSearch;
 
     @Override
-    /**�������� ��������� �� layout result*/
+    /**метод реализует фрагмент из layout result*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentResult = inflater.inflate(R.layout.result, null);
-        /**������������� ��������� FragmentStartSearchLayout*/
         fragmentStartSearch = new FragmentStartSearchLayout();
-        /**������������� ������ resultb �� layout result*/
+        /**инициализация кнопки для нового поиска resultb �� layout result*/
         Button button = (Button) fragmentResult.findViewById(R.id.resultb);
-        /**��������� ������� ������ resultb ����� � replace()
-         �������� ���� �������� �� ������*/
-        // получаем экземпляр элемента ListView
+        /**получаем экземпляр элемента ListView*/
         ListView listView = (ListView) fragmentResult.findViewById(R.id.listView);
-        String[] resultGit ={FragmentStartSearchLayout.searchString};
+        /**запись результатов из статической переменной в массив*/
+        String[] resultGit = {FragmentStartSearchLayout.searchString};
         ArrayAdapter<String> adapter;
-        adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1, resultGit);
+        /**вывод данных в список во встроенный адаптер*/
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, resultGit);
+        /**вывод данных сформированных в адаптере на экран*/
         listView.setAdapter(adapter);
+        /**обработчик нажатия кнопки для перехода между фрагментами*/
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
