@@ -1,7 +1,7 @@
 package fragment;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,21 +33,21 @@ public class FragmentStartSearchLayout extends Fragment {
     /**
      * объявление переменной для перехода между фрагментами FragmentTransaction
      */
-    private FragmentTransaction transaction;
+    private FragmentTransaction mTransaction;
     /**
      * объявление фрагмента�layout result для дальнейшего использования при переходе
      */
-    private Fragment fragmentResult;
+    private Fragment mFragmentResult;
     /**
      * объявление статической переменной содержащей ответ на запрос от сервера github
      */
     public static ArrayList<Item> itemArrayList;
-    String API = "https://api.github.com";
+    final private String API = "https://api.github.com";
     /**
      * объявление поля ввода для значения поиска
      */
-    EditText searchText;
-    ProgressBar pbar;
+    EditText mFormSearchText;
+    ProgressBar mPbar;
 
     @Override
     /**метод реализует фрагмент из layout start_search*/
@@ -57,9 +57,9 @@ public class FragmentStartSearchLayout extends Fragment {
         /**инициализация кнопки поиска searchb из layout start_search*/
         Button button = (Button) fragmentStartSearch.findViewById(R.id.searchb);
         /**инициализация поля поиска searcht из layout start_search*/
-        searchText = (EditText) fragmentStartSearch.findViewById(R.id.searcht);
-        pbar = (ProgressBar) fragmentStartSearch.findViewById(R.id.pbar);
-        pbar.setVisibility(View.INVISIBLE);
+        mFormSearchText = (EditText) fragmentStartSearch.findViewById(R.id.searcht);
+        mPbar = (ProgressBar) fragmentStartSearch.findViewById(R.id.pbar);
+        mPbar.setVisibility(View.INVISIBLE);
         /**метод обрабатывает нажатие на кнопку searchb и инициализацию метода replace()
          который заменяет фрагменты*/
 
@@ -67,14 +67,14 @@ public class FragmentStartSearchLayout extends Fragment {
             public void onClick(View v) {
 
                 /**делает видимым ProgressBar в начале запроса*/
-                pbar.setVisibility(View.VISIBLE);
+                mPbar.setVisibility(View.VISIBLE);
                 /**инициализирует переменную для доступа к серверу*/
                 RestAdapter restAdapter = new RestAdapter.Builder()
                         .setEndpoint(API).build();
                 /**подключает к адаптеру интерфейс*/
                 Gitapi git = restAdapter.create(Gitapi.class);
                 /**преобразует значение поля ввода в строку для использования в запросе*/
-                String stringSearch = searchText.getText().toString();
+                String stringSearch = mFormSearchText.getText().toString();
                 /**инициализация интерфейса и метода для запроса*/
                 git.getFeed((stringSearch + "+in:description+in:name"), new Callback<Example>() {
                     @Override
@@ -82,21 +82,21 @@ public class FragmentStartSearchLayout extends Fragment {
                         /** преобразование json в объектную модель*/
                         itemArrayList = gitmodel.getItems();
                         /** делает невидимым ProgressBar при окончании запроса*/
-                        pbar.setVisibility(View.INVISIBLE);
+                        mPbar.setVisibility(View.INVISIBLE);
                         /**инициализация объекта FragmentResultLayout для перехода между фрагментами*/
-                        fragmentResult = new FragmentResultLayout();
-                        transaction = getFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment, fragmentResult);
+                        mFragmentResult = new FragmentResultLayout();
+                        mTransaction = getFragmentManager().beginTransaction();
+                        mTransaction.replace(R.id.fragment, mFragmentResult);
                         /**добавление в стек фрагментов для кнопки back*/
-                        transaction.addToBackStack(null);
-                        transaction.commit();
+                        mTransaction.addToBackStack(null);
+                        mTransaction.commit();
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
                         android.util.Log.v("tag", error.toString());
                         /** делает невидимым ProgressBar при выводе ошибки*/
-                        pbar.setVisibility(View.INVISIBLE);
+                        mPbar.setVisibility(View.INVISIBLE);
                     }
                 });
 

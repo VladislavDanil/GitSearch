@@ -1,19 +1,21 @@
 package fragment;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import adapter.AdapterRepositories;
 
 import com.example.nitrogenium.githubsearch.R;
 
 import java.util.ArrayList;
 
+import adapter.RepositoriesElement;
 import github.Item;
 
 /**
@@ -27,40 +29,39 @@ public class FragmentResultLayout extends Fragment {
     /**
      * объявление переменной для перехода между фрагментами FragmentTransaction
      */
-    private FragmentTransaction transaction;
+    private FragmentTransaction mTransaction;
     /**
      * объявление фрагмента�layout start_search для дальнейшего использования при переходе
      */
-    private Fragment fragmentStartSearch;
-
+    private Fragment mFragmentStartSearch;
+    ArrayList<RepositoriesElement> repositoriesElements = new ArrayList<RepositoriesElement>();
     @Override
     /**метод реализует фрагмент из layout result*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentResult = inflater.inflate(R.layout.result, null);
-        fragmentStartSearch = new FragmentStartSearchLayout();
+
+        mFragmentStartSearch = new FragmentStartSearchLayout();
         /**инициализация кнопки для нового поиска resultb �� layout result*/
         Button button = (Button) fragmentResult.findViewById(R.id.resultb);
         /**получаем экземпляр элемента ListView*/
         ListView listView = (ListView) fragmentResult.findViewById(R.id.listView);
         /**запись результатов из статической переменной в массив*/
-        ArrayList<String> resultGit=new ArrayList<String>();
         for (Item item : FragmentStartSearchLayout.itemArrayList) {
-                resultGit.add("Name: " + item.getName() + "\n" + "Description: " + item.getDescription());
+            repositoriesElements.add(new RepositoriesElement(item.stargazersCount, item.id, item.name, item.owner.login));
         }
-        ArrayAdapter<String> adapter;
-        /**вывод данных в список во встроенный адаптер*/
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, resultGit);
+
         /**вывод данных сформированных в адаптере на экран*/
-        listView.setAdapter(adapter);
+        AdapterRepositories adapterRepositories;
+        adapterRepositories = new AdapterRepositories(getActivity(),repositoriesElements);
+        listView.setAdapter(adapterRepositories);
         /**обработчик нажатия кнопки для перехода между фрагментами*/
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment, fragmentStartSearch);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                mTransaction = getFragmentManager().beginTransaction();
+                mTransaction.replace(R.id.fragment, mFragmentStartSearch);
+                mTransaction.addToBackStack(null);
+                mTransaction.commit();
             }
         });
         return fragmentResult;
