@@ -13,14 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/searcht"
-        android:layout_marginTop="42dp"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:hint="@string/SearchFormStartLayout"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,9 +35,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/ButtonStartLayout"
-        android:id="@+id/button"
+        android:id="@+id/searchb"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pbar"
         android:layout_below="@+id/searcht"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="37dp" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

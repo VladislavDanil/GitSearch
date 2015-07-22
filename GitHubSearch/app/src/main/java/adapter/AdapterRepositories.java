@@ -10,6 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.nitrogenium.githubsearch.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ public class AdapterRepositories  extends BaseAdapter {
 
     Context ctx;
     LayoutInflater lInflater;
+    Picasso mPicasso;
     ArrayList<RepositoriesElement> objects;
     RepositoriesElement repositories;
     public AdapterRepositories(Context context, ArrayList<RepositoriesElement> repositories) {
@@ -27,6 +29,7 @@ public class AdapterRepositories  extends BaseAdapter {
         objects = repositories;
         lInflater = (LayoutInflater) ctx
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mPicasso = Picasso.with(context);
     }
 
     // кол-во элементов
@@ -56,21 +59,13 @@ public class AdapterRepositories  extends BaseAdapter {
         }
 
         repositories= getRepositoriesElement(position);
-        ((TextView) view.findViewById(R.id.name_repositories)).setText(repositories.name_rep);
-        ((TextView) view.findViewById(R.id.login)).setText(repositories.login);
-        ((ImageView) view.findViewById(R.id.avatar)).setImageResource(repositories.avatar_url);
-        final RatingBar ratingBar = (RatingBar) view.findViewById(R.id.ratingBar);
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+        ((TextView) view.findViewById(R.id.name_repositories)).setText("Название:" + "\n" + repositories.name_rep);
+        ((TextView) view.findViewById(R.id.login)).setText("Логин: " + repositories.login);
 
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating,
-                                        boolean fromUser) {
-                // TODO Auto-generated method stub
-                ratingBar.setRating(repositories.stargazers_count);
-                ratingBar.isIndicator();
-            }
-
-        });
+        ImageView avatar = (ImageView) view.findViewById(R.id.avatar);
+        mPicasso.load(repositories.avatar_url).into(avatar);
+        ((TextView) view.findViewById(R.id.star_rating)).setText(repositories.stargazers_count);
+        ((ImageView) view.findViewById(R.id.starView)).setImageResource(R.drawable.star);
         return view;
     }
     RepositoriesElement getRepositoriesElement(int position) {

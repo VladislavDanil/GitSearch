@@ -48,7 +48,7 @@ public class FragmentResultLayout extends Fragment {
         ListView listView = (ListView) fragmentResult.findViewById(R.id.listView);
         /**запись результатов из статической переменной в массив*/
         for (Item item : FragmentStartSearchLayout.itemArrayList) {
-            repositoriesElements.add(new RepositoriesElement(item.stargazersCount, item.id, item.name, item.owner.login));
+            repositoriesElements.add(new RepositoriesElement((item.stargazersCount).toString(), item.owner.avatarUrl, item.name, item.owner.login));
         }
 
         /**вывод данных сформированных в адаптере на экран*/
