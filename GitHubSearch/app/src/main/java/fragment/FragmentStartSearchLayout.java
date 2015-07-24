@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import github.*;
 
 import com.example.nitrogenium.githubsearch.R;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.DurationInMillis;
 
 import java.util.ArrayList;
 
@@ -48,7 +50,6 @@ public class FragmentStartSearchLayout extends Fragment {
      */
     EditText mFormSearchText;
     ProgressBar mPbar;
-
     @Override
     /**метод реализует фрагмент из layout start_search*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
