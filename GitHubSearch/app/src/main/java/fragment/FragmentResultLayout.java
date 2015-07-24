@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import adapter.AdapterRepositories;
@@ -37,6 +38,7 @@ import robospice.SampleRetrofitSpiceService;
 public class FragmentResultLayout extends Fragment {
     private SpiceManager spiceManager = new SpiceManager(SampleRetrofitSpiceService.class);
     private SampleRetrofitSpiceRequest githubRequest;
+    private ProgressBar resultProgressBar;
     /**
      * объявление переменной для перехода между фрагментами FragmentTransaction
      */
@@ -51,21 +53,12 @@ public class FragmentResultLayout extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentResult = inflater.inflate(R.layout.result, null);
-
+        setRetainInstance(true);
+        resultProgressBar = (ProgressBar) fragmentResult.findViewById(R.id.ResultProgressBar);
+        resultProgressBar.setVisibility(View.INVISIBLE);
         mFragmentStartSearch = new FragmentStartSearchLayout();
         /**инициализация кнопки для нового поиска resultb �� layout result*/
         Button button = (Button) fragmentResult.findViewById(R.id.resultb);
-        /**получаем экземпляр элемента ListView*/
-        ListView listView = (ListView) fragmentResult.findViewById(R.id.listView);
-        /**запись результатов из статической переменной в массив*/
-        for (Item item : FragmentStartSearchLayout.itemArrayList) {
-            repositoriesElements.add(new RepositoriesElement((item.stargazersCount).toString(), item.owner.avatarUrl, item.name, item.owner.login));
-        }
-
-        /**вывод данных сформированных в адаптере на экран*/
-        AdapterRepositories adapterRepositories;
-        adapterRepositories = new AdapterRepositories(getActivity(),repositoriesElements);
-        listView.setAdapter(adapterRepositories);
         /**обработчик нажатия кнопки для перехода между фрагментами*/
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -75,6 +68,7 @@ public class FragmentResultLayout extends Fragment {
                 mTransaction.commit();
             }
         });
+        githubRequest = new SampleRetrofitSpiceRequest(FragmentStartSearchLayout.mStringSearch);
         return fragmentResult;
     }
 
@@ -83,17 +77,25 @@ public class FragmentResultLayout extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        setRetainInstance(true);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void onStart() {
+        resultProgressBar.setVisibility(View.VISIBLE);
         spiceManager.start(getActivity());
         super.onStart();
         getSpiceManager().execute(githubRequest, "github", DurationInMillis.ONE_MINUTE, new ListContributorRequestListener());
+
     }
 
-    private void updateContributors(final Example.List result) {
+    private void updateContributors(final Example result) {
         /**получаем экземпляр элемента ListView*/
         ListView listView = (ListView) getActivity().findViewById(R.id.listView);
         /**запись результатов из статической переменной в массив*/
-        for (Item item : FragmentStartSearchLayout.itemArrayList) {
+        for (Item item : result.getItems()) {
             repositoriesElements.add(new RepositoriesElement((item.stargazersCount).toString(), item.owner.avatarUrl, item.name, item.owner.login));
         }
 
@@ -103,15 +105,17 @@ public class FragmentResultLayout extends Fragment {
         listView.setAdapter(adapterRepositories);
     }
 
-    public final class ListContributorRequestListener implements RequestListener<Example.List> {
+    public final class ListContributorRequestListener implements RequestListener<Example> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
+            resultProgressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();
         }
 
         @Override
-        public void onRequestSuccess(final Example.List result) {
+        public void onRequestSuccess(final Example result) {
+            resultProgressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
             updateContributors(result);
         }

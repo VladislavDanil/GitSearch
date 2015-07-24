@@ -27,6 +27,4 @@ public class Example {
     public void setItems(ArrayList<Item> items) {
         this.items = items;
     }
-    public static class List extends ArrayList<Example> {
-    }
 }

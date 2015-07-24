@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import fragment.FragmentStartSearchLayout;
 
 /**
- * Класс инициализирует главную активность
- *@author Данилов Владислав
+ * РљР»Р°СЃСЃ РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ РіР»Р°РІРЅСѓСЋ Р°РєС‚РёРІРЅРѕСЃС‚СЊ
+ *@author Р”Р°РЅРёР»РѕРІ Р’Р»Р°РґРёСЃР»Р°РІ
  * */
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -17,21 +17,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_layout);
         /**
-         * объявляю переменную класса Fragment которую в последующем
-         * буду использовать для инициализации фрагмента layout result
+         * РѕР±СЉСЏРІР»СЏСЋ РїРµСЂРµРјРµРЅРЅСѓСЋ РєР»Р°СЃСЃР° Fragment РєРѕС‚РѕСЂСѓСЋ РІ РїРѕСЃР»РµРґСѓСЋС‰РµРј
+         * Р±СѓРґСѓ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё С„СЂР°РіРјРµРЅС‚Р° layout result
          * */
         Fragment fragmentStartSearch;
         /**
-         * объявляю переменную класса FragmentTransaction позволяющего
-         * удалять, добавлять, заменять фрагмент
+         * РѕР±СЉСЏРІР»СЏСЋ РїРµСЂРµРјРµРЅРЅСѓСЋ РєР»Р°СЃСЃР° FragmentTransaction РїРѕР·РІРѕР»СЏСЋС‰РµРіРѕ
+         * СѓРґР°Р»СЏС‚СЊ, РґРѕР±Р°РІР»СЏС‚СЊ, Р·Р°РјРµРЅСЏС‚СЊ С„СЂР°РіРјРµРЅС‚
          * */
         FragmentTransaction transaction;
         /**
-         * инициализация фрагмента FragmentStartSearchLayout
+         * РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С„СЂР°РіРјРµРЅС‚Р° FragmentStartSearchLayout
          * */
         fragmentStartSearch = new FragmentStartSearchLayout();
         /**
-         * вызов фрагмента fragmentStartSearch в layout fragment_layout
+         * РІС‹Р·РѕРІ С„СЂР°РіРјРµРЅС‚Р° fragmentStartSearch РІ layout fragment_layout
          * */
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment, fragmentStartSearch);

@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -27,4 +33,14 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp" />
 
+
+
 </LinearLayout>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="134dp"
+        android:layout_height="134dp"
+        android:id="@+id/ResultProgressBar"
+        android:layout_gravity="center" />
+</FrameLayout>

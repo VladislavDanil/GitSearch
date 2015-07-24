@@ -1,36 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
         android:id="@+id/textView2"
         android:textSize="15sp"
         android:text="@string/HeadResultLayout"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal" />
+        android:gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:layout_above="@+id/listView"
+        android:layout_centerHorizontal="true" />
 
     <ListView
         android:layout_width="340dp"
         android:layout_height="190dp"
         android:id="@+id/listView"
-        android:layout_below="@+id/textView2"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/resultb"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:layout_width="153dp"
-        android:layout_height="35dp"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
         android:text="@string/ButtonResultLayout"
         android:id="@+id/resultb"
         android:layout_gravity="right"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="false"
+        android:layout_below="@+id/listView"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_toRightOf="@+id/textView2"
+        android:layout_toLeftOf="@+id/textView2"
+        android:layout_alignRight="@+id/textView2" />
 
 </RelativeLayout>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ResultProgressBar"
+        android:layout_gravity="center" />
+</FrameLayout>

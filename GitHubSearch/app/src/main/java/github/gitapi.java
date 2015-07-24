@@ -1,9 +1,7 @@
 package github;
 
 import retrofit.Callback;
-import retrofit.client.Response;
 import retrofit.http.GET;
-import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
@@ -18,5 +16,5 @@ public interface Gitapi {
      */
     @GET("/search/repositories?sort=stars&order=desc")
     /**метод, на входе получает строку и подставляет ее в запрос*/
-    public void getFeed(@Query("q") String stringSearch, Callback<Example> response);
+    Example getFeed(@Query("q") String stringSearch);
 }
