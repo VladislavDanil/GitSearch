@@ -76,10 +76,10 @@ public class FragmentResultLayout extends Fragment {
         return spiceManager;
     }
 
-    @Override
+
     public void onCreate(Bundle savedInstanceState) {
-        setRetainInstance(true);
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
@@ -89,6 +89,12 @@ public class FragmentResultLayout extends Fragment {
         super.onStart();
         getSpiceManager().execute(githubRequest, "github", DurationInMillis.ONE_MINUTE, new ListContributorRequestListener());
 
+    }
+
+    @Override
+    public void onStop() {
+        spiceManager.shouldStop();
+        super.onStop();
     }
 
     private void updateContributors(final Example result) {

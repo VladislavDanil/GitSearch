@@ -16,26 +16,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_layout);
-        /**
-         * объявляю переменную класса Fragment которую в последующем
-         * буду использовать для инициализации фрагмента layout result
-         * */
-        Fragment fragmentStartSearch;
-        /**
-         * объявляю переменную класса FragmentTransaction позволяющего
-         * удалять, добавлять, заменять фрагмент
-         * */
-        FragmentTransaction transaction;
-        /**
-         * инициализация фрагмента FragmentStartSearchLayout
-         * */
-        fragmentStartSearch = new FragmentStartSearchLayout();
-        /**
-         * вызов фрагмента fragmentStartSearch в layout fragment_layout
-         * */
-        transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment, fragmentStartSearch);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        if (savedInstanceState == null) {
+            /**
+             * объявляю переменную класса Fragment которую в последующем
+             * буду использовать для инициализации фрагмента layout result
+             * */
+            Fragment fragmentStartSearch;
+            /**
+             * объявляю переменную класса FragmentTransaction позволяющего
+             * удалять, добавлять, заменять фрагмент
+             * */
+            FragmentTransaction transaction;
+            /**
+             * инициализация фрагмента FragmentStartSearchLayout
+             * */
+            fragmentStartSearch = new FragmentStartSearchLayout();
+            /**
+             * вызов фрагмента fragmentStartSearch в layout fragment_layout
+             * */
+            transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment, fragmentStartSearch);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 }
