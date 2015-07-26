@@ -31,7 +31,7 @@ import robospice.SampleRetrofitSpiceService;
 /**
  * Класс реализует фрагмент из result Layout и при нажатии кнопки позволяет переходить
  * к strart_searh Layout
- * кроме того реализует вывод данныхв список на экран
+ * кроме того реализует вывод данных в список на экран
  *
  * @author Данилов Владислав
  */
@@ -53,7 +53,6 @@ public class FragmentResultLayout extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentResult = inflater.inflate(R.layout.result, null);
-        setRetainInstance(true);
         resultProgressBar = (ProgressBar) fragmentResult.findViewById(R.id.ResultProgressBar);
         resultProgressBar.setVisibility(View.INVISIBLE);
         mFragmentStartSearch = new FragmentStartSearchLayout();
@@ -97,7 +96,7 @@ public class FragmentResultLayout extends Fragment {
         super.onStop();
     }
 
-    private void updateContributors(final Example result) {
+    private void updateContributors(Example result) {
         /**получаем экземпляр элемента ListView*/
         ListView listView = (ListView) getActivity().findViewById(R.id.listView);
         /**запись результатов из статической переменной в массив*/
@@ -120,7 +119,7 @@ public class FragmentResultLayout extends Fragment {
         }
 
         @Override
-        public void onRequestSuccess(final Example result) {
+        public void onRequestSuccess(Example result) {
             resultProgressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
             updateContributors(result);

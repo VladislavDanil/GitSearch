@@ -1,7 +1,8 @@
 package adapter;
-
 /**
- * Created by Nitrogenium on 21.07.15.
+ * Класс реализует адаптер для result Layout.
+ *
+ * @author Данилов Владислав
  */
 public class RepositoriesElement {
     public String stargazers_count;

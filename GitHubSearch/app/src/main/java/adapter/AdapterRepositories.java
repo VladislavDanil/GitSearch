@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
+ *
  * Created by Nitrogenium on 21.07.15.
  */
 public class AdapterRepositories  extends BaseAdapter {
@@ -65,7 +66,7 @@ public class AdapterRepositories  extends BaseAdapter {
         ImageView avatar = (ImageView) view.findViewById(R.id.avatar);
         mPicasso.load(repositories.avatar_url).into(avatar);
         ((TextView) view.findViewById(R.id.star_rating)).setText(repositories.stargazers_count);
-        ((ImageView) view.findViewById(R.id.starView)).setImageResource(R.drawable.star);
+        ((ImageView) view.findViewById(R.id.starView)).setImageResource(R.mipmap.ic_star);
         return view;
     }
     RepositoriesElement getRepositoriesElement(int position) {
