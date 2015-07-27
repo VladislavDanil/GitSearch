@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -29,37 +28,57 @@ import robospice.SampleRetrofitSpiceRequest;
 import robospice.SampleRetrofitSpiceService;
 
 /**
- * Класс реализует фрагмент из result Layout и при нажатии кнопки позволяет переходить
- * к strart_searh Layout
- * кроме того реализует вывод данных в список на экран
+ * It creates a fragment from result Layout
+ * and when you pass to strart_searh Layout.
+ * It makes a request for github using the libraries robospice.
  *
  * @author Данилов Владислав
  */
 public class FragmentResultLayout extends Fragment {
-    private SpiceManager spiceManager = new SpiceManager(SampleRetrofitSpiceService.class);
-    private SampleRetrofitSpiceRequest githubRequest;
-    private ProgressBar resultProgressBar;
     /**
-     * объявление переменной для перехода между фрагментами FragmentTransaction
+     * to execute requests, clear cache, prevent listeners from being called and so on,
+     * basically, all features of the SpiceService are accessible from the SpiceManager,
+     * inicialisation using class SampleRetrofitSpiceService
+     */
+    private SpiceManager mSpiceManager = new SpiceManager(SampleRetrofitSpiceService.class);
+    /**
+     * it is used to create queries
+     */
+    private SampleRetrofitSpiceRequest mGithubRequest;
+    /**
+     * visual indicator of progress in some operation
+     */
+    private ProgressBar mResultProgressBar;
+    /**
+     * API for performing a set of Fragment operations
      */
     private FragmentTransaction mTransaction;
     /**
-     * объявление фрагмента�layout start_search для дальнейшего использования при переходе
+     * ads fragment�layout start_search for further use in the transition
      */
     private Fragment mFragmentStartSearch;
-    ArrayList<RepositoriesElement> repositoriesElements = new ArrayList<RepositoriesElement>();
+    ArrayList<RepositoriesElement> mRepositoriesElements = new ArrayList<RepositoriesElement>();
+
+    /**
+     * method implements a fragment of layout result,
+     * realizes transition by pressing the button resultb
+     *
+     * @param inflater           the LayoutInflater object that can be used to inflate any views in the fragment
+     * @param container          if non-null, this is the parent view that the fragment's UI should be attached to.
+     *                           the fragment should not add the view itself, but this can be used to generate the
+     *                           LayoutParams of the view
+     * @param savedInstanceState if non-null, this fragment is being re-constructed from a previous saved state as given here
+     * @return return the View for the fragment's UI, or null
+     */
     @Override
-    /**метод реализует фрагмент из layout result*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentResult = inflater.inflate(R.layout.result, null);
-        resultProgressBar = (ProgressBar) fragmentResult.findViewById(R.id.ResultProgressBar);
-        resultProgressBar.setVisibility(View.INVISIBLE);
+        mResultProgressBar = (ProgressBar) fragmentResult.findViewById(R.id.result_progress_bar);
+        mResultProgressBar.setVisibility(View.INVISIBLE);
         mFragmentStartSearch = new FragmentStartSearchLayout();
-        /**инициализация кнопки для нового поиска resultb �� layout result*/
-        Button button = (Button) fragmentResult.findViewById(R.id.resultb);
-        /**обработчик нажатия кнопки для перехода между фрагментами*/
-        button.setOnClickListener(new View.OnClickListener() {
+        Button resultb = (Button) fragmentResult.findViewById(R.id.resultb);
+        resultb.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mTransaction = getFragmentManager().beginTransaction();
                 mTransaction.replace(R.id.fragment, mFragmentStartSearch);
@@ -67,60 +86,73 @@ public class FragmentResultLayout extends Fragment {
                 mTransaction.commit();
             }
         });
-        githubRequest = new SampleRetrofitSpiceRequest(FragmentStartSearchLayout.mStringSearch);
+        mGithubRequest = new SampleRetrofitSpiceRequest(FragmentStartSearchLayout.mStringSearch);
         return fragmentResult;
     }
 
-    protected SpiceManager getSpiceManager() {
-        return spiceManager;
+    /**
+     * constructor SpiceManager
+     *
+     * @return the instances of this class allow to acces the SpiceService
+     */
+    protected SpiceManager getmSpiceManager() {
+        return mSpiceManager;
     }
 
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // returns the Transition that will be used to move Views out of the scene when the Fragment
+        // is preparing to be removed, hidden, or detached because of popping the back stack
         setRetainInstance(true);
     }
 
     @Override
     public void onStart() {
-        resultProgressBar.setVisibility(View.VISIBLE);
-        spiceManager.start(getActivity());
+        mResultProgressBar.setVisibility(View.VISIBLE);
+        mSpiceManager.start(getActivity());
         super.onStart();
-        getSpiceManager().execute(githubRequest, "github", DurationInMillis.ONE_MINUTE, new ListContributorRequestListener());
+        getmSpiceManager().execute(mGithubRequest, "github", DurationInMillis.ONE_MINUTE, new ListContributorRequestListener());
 
     }
 
     @Override
     public void onStop() {
-        spiceManager.shouldStop();
+        mSpiceManager.shouldStop();
         super.onStop();
     }
 
+    /**
+     * creates ListView,
+     * record the results of a static variable in an array,
+     * the output data generated in the adapter to the screen
+     *
+     * @param result array json serialization object
+     */
     private void updateContributors(Example result) {
-        /**получаем экземпляр элемента ListView*/
         ListView listView = (ListView) getActivity().findViewById(R.id.listView);
-        /**запись результатов из статической переменной в массив*/
         for (Item item : result.getItems()) {
-            repositoriesElements.add(new RepositoriesElement((item.stargazersCount).toString(), item.owner.avatarUrl, item.name, item.owner.login));
+            mRepositoriesElements.add(new RepositoriesElement((item.stargazersCount).toString(), item.owner.avatarUrl, item.name, item.owner.login));
         }
-
-        /**вывод данных сформированных в адаптере на экран*/
         AdapterRepositories adapterRepositories;
-        adapterRepositories = new AdapterRepositories(getActivity(),repositoriesElements);
+        adapterRepositories = new AdapterRepositories(getActivity(), mRepositoriesElements);
         listView.setAdapter(adapterRepositories);
     }
 
+    /**
+     * Processing successful and unsuccessful request.
+     */
     public final class ListContributorRequestListener implements RequestListener<Example> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-            resultProgressBar.setVisibility(View.INVISIBLE);
+            mResultProgressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onRequestSuccess(Example result) {
-            resultProgressBar.setVisibility(View.INVISIBLE);
+            mResultProgressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
             updateContributors(result);
         }

@@ -8,32 +8,25 @@ import android.support.v7.app.AppCompatActivity;
 import fragment.FragmentStartSearchLayout;
 
 /**
- * Класс инициализирует главную активность
- *@author Данилов Владислав
- * */
+ * the class initializes the main activity
+ *
+ * @author Данилов Владислав
+ */
 public class MainActivity extends AppCompatActivity {
+    /**
+     * method creates the main active,
+     * loads the initial fragment FragmentStartSearchLayout
+     *
+     * @param savedInstanceState if non-null, this fragment is being re-constructed from a previous saved state as given here
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_layout);
         if (savedInstanceState == null) {
-            /**
-             * объявляю переменную класса Fragment которую в последующем
-             * буду использовать для инициализации фрагмента layout result
-             * */
             Fragment fragmentStartSearch;
-            /**
-             * объявляю переменную класса FragmentTransaction позволяющего
-             * удалять, добавлять, заменять фрагмент
-             * */
             FragmentTransaction transaction;
-            /**
-             * инициализация фрагмента FragmentStartSearchLayout
-             * */
             fragmentStartSearch = new FragmentStartSearchLayout();
-            /**
-             * вызов фрагмента fragmentStartSearch в layout fragment_layout
-             * */
             transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragment, fragmentStartSearch);
             transaction.addToBackStack(null);

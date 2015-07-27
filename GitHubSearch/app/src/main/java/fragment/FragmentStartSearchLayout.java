@@ -9,57 +9,55 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
-import github.*;
 import com.example.nitrogenium.githubsearch.R;
-import java.util.ArrayList;
 /**
- * Класс реализует фрагмент из start_search Layout и при нажатии кнопки позволяет переходить
- * к result Layout
- * кроме того реализует интерфейс gitapi тем самым позволяя сделать запрос к серверу и получить результат
+ * The class implements a fragment of start_search Layout and press the button allows you to jump
+ * to result Layout
+ * implements the interface gitapi thereby enabling to make a request to the server and get results
  *
- * @author Данилов Владислав
+ * @author Danilov Vladislav
  */
 public class FragmentStartSearchLayout extends Fragment {
     /**
-     * объявление переменной для перехода между фрагментами FragmentTransaction
+     * variable declaration for the transition between fragments FragmentTransaction
      */
     private FragmentTransaction mTransaction;
     /**
-     * объявление фрагмента�layout result для дальнейшего использования при переходе
+     * ads fragment�layout result for further use in the transition
      */
     private Fragment mFragmentResult;
     /**
-     * объявление статической переменной содержащей ответ на запрос от сервера github
+     * ads containing static variable response to a request from the server github
      */
     public static String mStringSearch;
-    public static ArrayList<Item> itemArrayList;
-    final private String API = "https://api.github.com";
     /**
-     * объявление поля ввода для значения поиска
+     * ads input field for the value of search
      */
     EditText mFormSearchText;
+
+    /**
+     * method implements a fragment of the layout start_search
+     * @param inflater           the LayoutInflater object that can be used to inflate any views in the fragment
+     * @param container          if non-null, this is the parent view that the fragment's UI should be attached to.
+     *                           the fragment should not add the view itself, but this can be used to generate the
+     *                           LayoutParams of the view
+     * @param savedInstanceState if non-null, this fragment is being re-constructed from a previous saved state as given here
+     * @return return the View for the fragment's UI, or null
+     */
     @Override
-    /**метод реализует фрагмент из layout start_search*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentStartSearch = inflater.inflate(R.layout.start_search, null);
-        /**инициализация кнопки поиска searchb из layout start_search*/
         Button button = (Button) fragmentStartSearch.findViewById(R.id.searchb);
-        /**инициализация поля поиска searcht из layout start_search*/
         mFormSearchText = (EditText) fragmentStartSearch.findViewById(R.id.searcht);
-        /**метод обрабатывает нажатие на кнопку searchb и инициализацию метода replace()
-         который заменяет фрагменты*/
-
         button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 mStringSearch = mFormSearchText.getText().toString();
-
-                        mFragmentResult = new FragmentResultLayout();
-                        mTransaction = getFragmentManager().beginTransaction();
-                        mTransaction.replace(R.id.fragment, mFragmentResult);
-                        /**добавление в стек фрагментов для кнопки back*/
-                        mTransaction.addToBackStack(null);
-                        mTransaction.commit();
+                mFragmentResult = new FragmentResultLayout();
+                mTransaction = getFragmentManager().beginTransaction();
+                mTransaction.replace(R.id.fragment, mFragmentResult);
+                mTransaction.addToBackStack(null);
+                mTransaction.commit();
 
             }
         });

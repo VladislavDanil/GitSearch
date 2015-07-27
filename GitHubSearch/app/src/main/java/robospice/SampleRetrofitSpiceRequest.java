@@ -4,22 +4,36 @@ import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 
 import github.Example;
 import github.Gitapi;
-import roboguice.util.temp.Ln;
 
 /**
- * Created by Nitrogenium on 23.07.15.
+ * class contains methods for querying github
+ *
+ * @author Danilov Vladislav
  */
 public class SampleRetrofitSpiceRequest extends RetrofitSpiceRequest<Example, Gitapi> {
+    /**
+     * string search in request
+     */
     private String stringSearch;
 
+    /**
+     * challenge class RetrofitSpiceRequest
+     * receiving at the input string for the request
+     *
+     * @param stringSearch string for the request
+     */
     public SampleRetrofitSpiceRequest(String stringSearch) {
         super(Example.class, Gitapi.class);
         this.stringSearch = stringSearch;
     }
 
+    /**
+     * sending request
+     *
+     * @return
+     */
     @Override
     public Example loadDataFromNetwork() {
-        Ln.d("Call web service ");
         return getService().getFeed((stringSearch + "+in:description+in:name"));
     }
 }
