@@ -32,7 +32,7 @@ import robospice.SampleRetrofitSpiceService;
  * and when you pass to strart_searh Layout.
  * It makes a request for github using the libraries robospice.
  *
- * @author Данилов Владислав
+ * @author Danilov Vladislav
  */
 public class FragmentResultLayout extends Fragment {
     /**
@@ -112,7 +112,7 @@ public class FragmentResultLayout extends Fragment {
         mResultProgressBar.setVisibility(View.VISIBLE);
         mSpiceManager.start(getActivity());
         super.onStart();
-        getmSpiceManager().execute(mGithubRequest, "github", DurationInMillis.ONE_MINUTE, new ListContributorRequestListener());
+        getmSpiceManager().execute(mGithubRequest, FragmentStartSearchLayout.mStringSearch, DurationInMillis.ALWAYS_RETURNED, new ListContributorRequestListener());
 
     }
 

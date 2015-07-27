@@ -2,7 +2,10 @@ package github;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
+/**
+ * Object model query result.
+ * @author Danilov Vladislav
+ */
 public class Item {
 
     @Expose

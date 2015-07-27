@@ -30,7 +30,7 @@ public class SampleRetrofitSpiceRequest extends RetrofitSpiceRequest<Example, Gi
     /**
      * sending request
      *
-     * @return
+     * @return result request
      */
     @Override
     public Example loadDataFromNetwork() {

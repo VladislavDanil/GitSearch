@@ -41,6 +41,6 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="134dp"
         android:layout_height="134dp"
-        android:id="@+id/ResultProgressBar"
+        android:id="@+id/result_progress_bar"
         android:layout_gravity="center" />
 </FrameLayout>

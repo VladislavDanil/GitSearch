@@ -4,7 +4,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
-
+/**
+ * Object model query result.
+ * @author Danilov Vladislav
+ */
 public class Example {
 
     @SerializedName("total_count")
