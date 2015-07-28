@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import adapter.AdapterRepositories;
 
+import com.example.nitrogenium.githubsearch.MainActivity;
 import com.example.nitrogenium.githubsearch.R;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -57,7 +58,14 @@ public class FragmentResultLayout extends Fragment {
      * ads fragment�layout start_search for further use in the transition
      */
     private Fragment mFragmentStartSearch;
-    ArrayList<RepositoriesElement> mRepositoriesElements = new ArrayList<RepositoriesElement>();
+    /**
+     * the query string
+     */
+    private String mStringSearch;
+    /**
+     * a container for storing the results of the query
+     */
+    private ArrayList<RepositoriesElement> mRepositoriesElements = new ArrayList<RepositoriesElement>();
 
     /**
      * method implements a fragment of layout result,
@@ -80,13 +88,17 @@ public class FragmentResultLayout extends Fragment {
         Button resultb = (Button) fragmentResult.findViewById(R.id.resultb);
         resultb.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 mTransaction = getFragmentManager().beginTransaction();
+                mTransaction.setCustomAnimations(R.anim.search_start, R.anim.result_exit);
                 mTransaction.replace(R.id.fragment, mFragmentStartSearch);
                 mTransaction.addToBackStack(null);
                 mTransaction.commit();
             }
         });
-        mGithubRequest = new SampleRetrofitSpiceRequest(FragmentStartSearchLayout.mStringSearch);
+        Bundle stringSearch = getArguments();
+        mStringSearch = stringSearch.getString("string");
+        mGithubRequest = new SampleRetrofitSpiceRequest(mStringSearch);
         return fragmentResult;
     }
 
@@ -112,8 +124,7 @@ public class FragmentResultLayout extends Fragment {
         mResultProgressBar.setVisibility(View.VISIBLE);
         mSpiceManager.start(getActivity());
         super.onStart();
-        getmSpiceManager().execute(mGithubRequest, FragmentStartSearchLayout.mStringSearch, DurationInMillis.ALWAYS_RETURNED, new ListContributorRequestListener());
-
+        getmSpiceManager().execute(mGithubRequest, mStringSearch, DurationInMillis.ALWAYS_RETURNED, new ListContributorRequestListener());
     }
 
     @Override

@@ -1,8 +1,11 @@
 package com.example.nitrogenium.githubsearch;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import fragment.FragmentStartSearchLayout;
@@ -28,9 +31,38 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction transaction;
             fragmentStartSearch = new FragmentStartSearchLayout();
             transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.animstart,0);
             transaction.replace(R.id.fragment, fragmentStartSearch);
             transaction.addToBackStack(null);
             transaction.commit();
         }
+    }
+
+    /**
+     * method allows you to go back when you press
+     */
+    @Override
+    public void onBackPressed() {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+            alertDialog.setTitle("Выйти?");
+
+            alertDialog.setMessage("Вы действительно хотите выйти?");
+
+            alertDialog.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            });
+
+            alertDialog.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            alertDialog.show();
+            return;
     }
 }

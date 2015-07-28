@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+
 import com.example.nitrogenium.githubsearch.R;
 /**
  * The class implements a fragment of start_search Layout and press the button allows you to jump
@@ -17,7 +18,7 @@ import com.example.nitrogenium.githubsearch.R;
  *
  * @author Danilov Vladislav
  */
-public class FragmentStartSearchLayout extends Fragment {
+public class FragmentStartSearchLayout extends Fragment{
     /**
      * variable declaration for the transition between fragments FragmentTransaction
      */
@@ -27,13 +28,9 @@ public class FragmentStartSearchLayout extends Fragment {
      */
     private Fragment mFragmentResult;
     /**
-     * ads containing static variable response to a request from the server github
-     */
-    public static String mStringSearch;
-    /**
      * ads input field for the value of search
      */
-    EditText mFormSearchText;
+    private EditText mFormSearchText;
 
     /**
      * method implements a fragment of the layout start_search
@@ -52,13 +49,16 @@ public class FragmentStartSearchLayout extends Fragment {
         mFormSearchText = (EditText) fragmentStartSearch.findViewById(R.id.searcht);
         button.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                mStringSearch = mFormSearchText.getText().toString();
+                //forming a query string and transferring it by means of Bundle
+                Bundle stringSearch = new Bundle();
+                stringSearch.putString("string", mFormSearchText.getText().toString());
                 mFragmentResult = new FragmentResultLayout();
+                mFragmentResult.setArguments(stringSearch);
                 mTransaction = getFragmentManager().beginTransaction();
+                mTransaction.setCustomAnimations(R.anim.animstart, R.anim.search_exit);
                 mTransaction.replace(R.id.fragment, mFragmentResult);
                 mTransaction.addToBackStack(null);
                 mTransaction.commit();
-
             }
         });
 

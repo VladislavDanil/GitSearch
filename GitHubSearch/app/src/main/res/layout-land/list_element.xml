@@ -18,7 +18,8 @@
         android:layout_alignParentStart="false"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/avatar"
-        android:layout_toStartOf="@+id/avatar" />
+        android:layout_toStartOf="@+id/avatar"
+        android:layout_marginLeft="10dp" />
 
     <ImageView
         android:layout_width="100dp"
@@ -42,6 +43,14 @@
         android:gravity="top"
         android:layout_marginLeft="20dp" />
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/login"
+        android:layout_toEndOf="@+id/login"
+        android:layout_marginLeft="10dp">
+
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -49,7 +58,7 @@
         android:layout_alignTop="@+id/login"
         android:layout_toRightOf="@+id/login"
         android:layout_toEndOf="@+id/login"
-        android:layout_marginLeft="5dp" />
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -59,6 +68,9 @@
         android:id="@+id/star_rating"
         android:layout_below="@+id/starView"
         android:layout_alignLeft="@+id/starView"
-        android:layout_alignStart="@+id/starView" />
-
+        android:layout_alignStart="@+id/starView"
+        android:layout_marginLeft="0dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal" />
+    </LinearLayout>
 </RelativeLayout>
