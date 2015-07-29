@@ -40,7 +40,8 @@
         android:layout_height="wrap_content"
         android:text="@string/ButtonStartLayout"
         android:id="@+id/searchb"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/searcht"
+        android:layout_marginTop="10dp" />
 
 </RelativeLayout>
