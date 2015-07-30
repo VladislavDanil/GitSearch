@@ -1,12 +1,25 @@
 package com.example.nitrogenium.githubsearch;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import fragment.FragmentStartSearchLayout;
 
@@ -43,26 +56,25 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-            alertDialog.setTitle("Выйти?");
-
-            alertDialog.setMessage("Вы действительно хотите выйти?");
-
-            alertDialog.setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }
-            });
-
-            alertDialog.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            alertDialog.show();
-            return;
+            final Dialog alertDialog = new Dialog(MainActivity.this);
+            alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            final LinearLayout alertDialogCust = (LinearLayout) getLayoutInflater()
+                .inflate(R.layout.alert_dialog_main, null);
+            alertDialog.setContentView(alertDialogCust);
+            Button yes = (Button) alertDialogCust.findViewById(R.id.yes);
+            Button not = (Button) alertDialogCust.findViewById(R.id.not);
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                MainActivity.this.finish();
+            }
+        });
+        not.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                alertDialog.cancel();
+            }
+        });
+        alertDialog.show();
+        return;
     }
 }

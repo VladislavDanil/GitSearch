@@ -20,7 +20,14 @@ import java.util.ArrayList;
  * @author Danilov Vladislav
  */
 public class AdapterRepositories extends BaseAdapter {
+    public String getmURL() {
+        return mURL;
+    }
 
+    /**
+     * link to a website of the repository
+     */
+    String mURL;
     /**
      * provides access to the underlying application functions:
      * access to resources in the file system, call activity, etc
@@ -117,6 +124,7 @@ public class AdapterRepositories extends BaseAdapter {
         mPicasso.load(mRepositoriesElement.mAatarUrl).into(avatar);
         ((TextView) view.findViewById(R.id.star_rating)).setText(mRepositoriesElement.mStargazersCount);
         ((ImageView) view.findViewById(R.id.starView)).setImageResource(R.mipmap.ic_star);
+        mURL = mRepositoriesElement.mURL;
         return view;
     }
 

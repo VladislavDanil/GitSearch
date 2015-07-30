@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Вы действительно хотите выйти?"
+        android:id="@+id/textView3"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_alignLeft="@+id/yes"
+        android:layout_alignStart="@+id/yes"
+        android:layout_alignRight="@+id/not"
+        android:layout_alignEnd="@+id/not" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Нет"
+        android:id="@+id/not"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        style="@style/ButtonTheam"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Да"
+        android:id="@+id/yes"
+        android:layout_alignTop="@+id/not"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/not"
+        style="@style/ButtonTheam"
+        android:layout_marginTop="10dp" />
+
+</LinearLayout>

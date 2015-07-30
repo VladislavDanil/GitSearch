@@ -1,16 +1,21 @@
 package fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import ScansInternet.InternetDetecter;
 import adapter.AdapterRepositories;
 
 import com.example.nitrogenium.githubsearch.MainActivity;
@@ -82,6 +87,8 @@ public class FragmentResultLayout extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentResult = inflater.inflate(R.layout.result, null);
+        InternetDetecter validateInternet = new InternetDetecter();
+        validateInternet.hasConnection(getActivity());
         mResultProgressBar = (ProgressBar) fragmentResult.findViewById(R.id.result_progress_bar);
         mResultProgressBar.setVisibility(View.INVISIBLE);
         mFragmentStartSearch = new FragmentStartSearchLayout();
@@ -124,7 +131,7 @@ public class FragmentResultLayout extends Fragment {
         mResultProgressBar.setVisibility(View.VISIBLE);
         mSpiceManager.start(getActivity());
         super.onStart();
-        getmSpiceManager().execute(mGithubRequest, mStringSearch, DurationInMillis.ALWAYS_RETURNED, new ListContributorRequestListener());
+        getmSpiceManager().execute(mGithubRequest, mStringSearch, DurationInMillis.ONE_DAY, new ListContributorRequestListener());
     }
 
     @Override
@@ -143,11 +150,20 @@ public class FragmentResultLayout extends Fragment {
     private void updateContributors(Example result) {
         ListView listView = (ListView) getActivity().findViewById(R.id.listView);
         for (Item item : result.getItems()) {
-            mRepositoriesElements.add(new RepositoriesElement((item.stargazersCount).toString(), item.owner.avatarUrl, item.name, item.owner.login));
+            mRepositoriesElements.add(new RepositoriesElement((item.stargazersCount).toString(), item.owner.avatarUrl, item.name, item.owner.login, item.htmlUrl));
         }
-        AdapterRepositories adapterRepositories;
+        final AdapterRepositories adapterRepositories;
         adapterRepositories = new AdapterRepositories(getActivity(), mRepositoriesElements);
         listView.setAdapter(adapterRepositories);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
+
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(adapterRepositories.getmURL()));
+                startActivity(browserIntent);
+            }
+        });
     }
 
     /**
@@ -158,13 +174,11 @@ public class FragmentResultLayout extends Fragment {
         @Override
         public void onRequestFailure(SpiceException spiceException) {
             mResultProgressBar.setVisibility(View.INVISIBLE);
-            Toast.makeText(getActivity(), "failure", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onRequestSuccess(Example result) {
             mResultProgressBar.setVisibility(View.INVISIBLE);
-            Toast.makeText(getActivity(), "success", Toast.LENGTH_SHORT).show();
             updateContributors(result);
         }
     }

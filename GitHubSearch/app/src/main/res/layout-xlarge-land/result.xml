@@ -27,7 +27,8 @@
         android:layout_gravity="right"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/textView2" />
+        android:layout_above="@+id/textView2"
+        style="@style/ButtonTheam"/>
 
     <ListView
         android:layout_width="match_parent"

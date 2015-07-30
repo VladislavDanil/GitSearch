@@ -20,7 +20,9 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:hint="@string/SearchFormStartLayout"
-        android:textSize="25sp" />
+        android:textSize="25sp"
+        android:background="@drawable/edit_text"
+        android:singleLine="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -42,6 +44,7 @@
         android:id="@+id/searchb"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/searcht"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        style="@style/ButtonTheam"/>
 
 </RelativeLayout>

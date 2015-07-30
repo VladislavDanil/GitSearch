@@ -3,14 +3,20 @@ package fragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 
+import ScansInternet.InternetDetecter;
+
 import com.example.nitrogenium.githubsearch.R;
+
 /**
  * The class implements a fragment of start_search Layout and press the button allows you to jump
  * to result Layout
@@ -45,6 +51,8 @@ public class FragmentStartSearchLayout extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View fragmentStartSearch = inflater.inflate(R.layout.start_search, null);
+        InternetDetecter validateInternet = new InternetDetecter();
+        validateInternet.hasConnection(getActivity());
         Button button = (Button) fragmentStartSearch.findViewById(R.id.searchb);
         mFormSearchText = (EditText) fragmentStartSearch.findViewById(R.id.searcht);
         button.setOnClickListener(new OnClickListener() {
@@ -64,4 +72,6 @@ public class FragmentStartSearchLayout extends Fragment{
 
         return fragmentStartSearch;
     }
+
+
 }

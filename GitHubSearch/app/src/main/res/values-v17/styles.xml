@@ -4,12 +4,6 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowBackground">@color/fon</item>
         <item name="android:textColor">@color/text</item>
-        <item name="android:buttonStyle">@style/ButtonTheme</item>
-    </style>
-
-    <style name="ButtonTheme" parent="@android:style/Widget.Button">
-        <item name="android:background">@drawable/button</item>
-        <item name="android:textColor">@color/White</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:buttonStyle">@style/ButtonTheam</item>
     </style>
 </resources>

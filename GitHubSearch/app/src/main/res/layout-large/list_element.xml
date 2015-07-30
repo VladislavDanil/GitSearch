@@ -5,7 +5,8 @@
     android:weightSum="1"
     android:orientation="vertical"
     android:rowCount="8"
-    android:columnCount="12">
+    android:columnCount="12"
+    android:background="@drawable/adapter">
 
     <TextView
         android:layout_width="wrap_content"
