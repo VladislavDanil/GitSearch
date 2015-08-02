@@ -1,17 +1,27 @@
 package adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.example.nitrogenium.githubsearch.R;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
+
+import fragment.FragmentResultLayout;
+
+import static android.support.v4.app.ActivityCompat.startActivity;
 
 /**
  * The realization object and methods of the adapter layout list_element,
@@ -19,123 +29,97 @@ import java.util.ArrayList;
  *
  * @author Danilov Vladislav
  */
-public class AdapterRepositories extends BaseAdapter {
-    public String getmURL() {
-        return mURL;
-    }
 
-    /**
-     * link to a website of the repository
-     */
-    String mURL;
-    /**
-     * provides access to the underlying application functions:
-     * access to resources in the file system, call activity, etc
-     */
-    Context mcCtx;
-    /**
-     * it creates a copy of the layout XML file as the corresponding objects
-     */
-    LayoutInflater mInflater;
-    /**
-     * image downloading, transformation, and caching manager
-     */
-    Picasso mPicasso;
+
+
+public class AdapterRepositories extends RecyclerView.Adapter<AdapterRepositories.Repositories> {
     /**
      * array element object model contained adapter
      */
     ArrayList<RepositoriesElement> mObjects;
+
     /**
-     * object representation of the contents of the adapter {@link RepositoriesElement}
+     * image downloading, transformation, and caching manager
      */
+    Picasso mPicasso;
+
     RepositoriesElement mRepositoriesElement;
 
-    /**
-     * constructor retrieve a LayoutInflater for inflating layout resources in this context,
-     * adding into the context Picasso,
-     * object initialization {@link AdapterRepositories#mObjects}
-     *
-     * @param context      the current context
-     * @param repositories an array of objects
-     */
-    public AdapterRepositories(Context context, ArrayList<RepositoriesElement> repositories) {
-        mcCtx = context;
-        mObjects = repositories;
-        mInflater = (LayoutInflater) mcCtx
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mPicasso = Picasso.with(context);
+    public AdapterRepositories(ArrayList<RepositoriesElement> mObjects) {
+        this.mObjects = mObjects;
     }
 
-    /**
-     * the number of elements in the array {@link AdapterRepositories#mObjects}
-     *
-     * @return format number integer
-     */
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return mObjects.size();
     }
 
-    /**
-     * receiving element position and returns object the position value
-     *
-     * @param position position of the element in the array {@link AdapterRepositories#mObjects}
-     * @return size {@link AdapterRepositories#mObjects}
-     */
     @Override
-    public Object getItem(int position) {
-        return mObjects.get(position);
+    public void onBindViewHolder(Repositories repositories, int i) {
+        mRepositoriesElement = mObjects.get(i);
+        final Context context = repositories.mAvatar.getContext();
+        mPicasso.with(context).load(mRepositoriesElement.mAatarUrl).into(repositories.mAvatar);
+        repositories.mLogin.setText("Логин: " + mRepositoriesElement.mLogin);
+        repositories.mNameRepositories.setText("Название:" + "\n" + mRepositoriesElement.mNameRep);
+        repositories.mStarRating.setText(mRepositoriesElement.mStargazersCount);
+        repositories.mStarView.setImageResource(R.mipmap.ic_star);
+        repositories.mURL = mRepositoriesElement.mURL;
+        repositories.mListEl.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mRepositoriesElement.mURL));
+                context.startActivity(browserIntent);
+            }
+        });
     }
 
-    /**
-     * receives a position of an element and returns its index
-     *
-     * @param position position of the element in the array {@link AdapterRepositories#mObjects}
-     * @return returns index {@link AdapterRepositories#mObjects}
-     */
     @Override
-    public long getItemId(int position) {
-        return position;
+    public Repositories onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View itemView = LayoutInflater.
+                from(viewGroup.getContext()).
+                inflate(R.layout.list_element, viewGroup, false);
+
+        return new Repositories(itemView);
     }
 
-    /**
-     * creates adapter View
-     * looking element of the position in {@link AdapterRepositories#mRepositoriesElement},
-     * fills in the object model adapter
-     *
-     * @param position    position of the element in the array {@link AdapterRepositories#mObjects}
-     * @param convertView the basic building block for user interface components
-     * @param parent      is a special view that can contain other views (called children.)
-     * @return viwe model adapter
-     */
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
 
-        View view = convertView;
-        if (view == null) {
-            view = mInflater.inflate(R.layout.list_element, parent, false);
+    public static class Repositories extends RecyclerView.ViewHolder{
+        /**
+         * link to a website of the repository
+         */
+        String mURL;
+        /**
+         * provides access to the underlying application functions:
+         * access to resources in the file system, call activity, etc
+         */
+        Context mcCtx;
+        /**
+         * it creates a copy of the layout XML file as the corresponding objects
+         */
+        LayoutInflater mInflater;
+
+
+
+        public String getmURL() {
+            return mURL;
         }
 
-        mRepositoriesElement = getRepositoriesElement(position);
-        ((TextView) view.findViewById(R.id.name_repositories)).setText("Название:" + "\n" + mRepositoriesElement.mNameRep);
-        ((TextView) view.findViewById(R.id.login)).setText("Логин: " + mRepositoriesElement.mLogin);
+        TextView mNameRepositories;
+        TextView mLogin;
+        ImageView mAvatar;
+        TextView mStarRating;
+        ImageView mStarView;
+        RelativeLayout mListEl;
 
-        ImageView avatar = (ImageView) view.findViewById(R.id.avatar);
-        mPicasso.load(mRepositoriesElement.mAatarUrl).into(avatar);
-        ((TextView) view.findViewById(R.id.star_rating)).setText(mRepositoriesElement.mStargazersCount);
-        ((ImageView) view.findViewById(R.id.starView)).setImageResource(R.mipmap.ic_star);
-        mURL = mRepositoriesElement.mURL;
-        return view;
-    }
+        public Repositories (View v) {
+            super(v);
+            mNameRepositories = ((TextView) v.findViewById(R.id.name_repositories));
+            mLogin = ((TextView) v.findViewById(R.id.login));
+            mAvatar = (ImageView) v.findViewById(R.id.avatar);
+            mStarRating = ((TextView) v.findViewById(R.id.star_rating));
+            mStarView = ((ImageView) v.findViewById(R.id.starView));
+            mListEl = (RelativeLayout) v.findViewById(R.id.list_el);
+        }
 
-    /**
-     * return element for the position
-     *
-     * @param position position of the element in the array {@link AdapterRepositories#mObjects}
-     * @return element for the position of {@link AdapterRepositories#mObjects}
-     */
-    RepositoriesElement getRepositoriesElement(int position) {
-        return ((RepositoriesElement) getItem(position));
     }
 }
 

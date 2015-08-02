@@ -17,7 +17,7 @@ public class Example {
     @Expose
     public Boolean incompleteResults;
     @Expose
-    private ArrayList<Item> items = new ArrayList<Item>();
+    public ArrayList<Item> items = new ArrayList<Item>();
     public ArrayList<Item> getItems() {
         return items;
     }

@@ -11,4 +11,5 @@
     <string name="HeadListElementLayout">Название:</string>
     <string name="TextAutorNameListElementLayout">Имя автора:</string>
     <string name="starNum">Количество звезд</string>
+    <string name="action_search">Item 1</string>
 </resources>

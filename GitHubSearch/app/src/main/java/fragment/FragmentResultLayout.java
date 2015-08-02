@@ -1,24 +1,27 @@
 package fragment;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import ScansInternet.InternetDetecter;
 import adapter.AdapterRepositories;
 
-import com.example.nitrogenium.githubsearch.MainActivity;
 import com.example.nitrogenium.githubsearch.R;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -33,6 +36,8 @@ import github.Item;
 import robospice.SampleRetrofitSpiceRequest;
 import robospice.SampleRetrofitSpiceService;
 
+import static com.example.nitrogenium.githubsearch.R.mipmap.gh_search;
+
 /**
  * It creates a fragment from result Layout
  * and when you pass to strart_searh Layout.
@@ -41,6 +46,7 @@ import robospice.SampleRetrofitSpiceService;
  * @author Danilov Vladislav
  */
 public class FragmentResultLayout extends Fragment {
+    Bundle mBundleStringSearch;
     /**
      * to execute requests, clear cache, prevent listeners from being called and so on,
      * basically, all features of the SpiceService are accessible from the SpiceManager,
@@ -55,14 +61,6 @@ public class FragmentResultLayout extends Fragment {
      * visual indicator of progress in some operation
      */
     private ProgressBar mResultProgressBar;
-    /**
-     * API for performing a set of Fragment operations
-     */
-    private FragmentTransaction mTransaction;
-    /**
-     * ads fragment�layout start_search for further use in the transition
-     */
-    private Fragment mFragmentStartSearch;
     /**
      * the query string
      */
@@ -86,26 +84,20 @@ public class FragmentResultLayout extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View fragmentResult = inflater.inflate(R.layout.result, null);
+        View fragmentResult = inflater.inflate(R.layout.result, container, false);
         InternetDetecter validateInternet = new InternetDetecter();
         validateInternet.hasConnection(getActivity());
         mResultProgressBar = (ProgressBar) fragmentResult.findViewById(R.id.result_progress_bar);
         mResultProgressBar.setVisibility(View.INVISIBLE);
-        mFragmentStartSearch = new FragmentStartSearchLayout();
-        Button resultb = (Button) fragmentResult.findViewById(R.id.resultb);
-        resultb.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        mBundleStringSearch = getArguments();
+        if (mBundleStringSearch != null) {
+            mStringSearch = mBundleStringSearch.getString("string");
+            mGithubRequest = new SampleRetrofitSpiceRequest(mStringSearch);
+        } else {
+            ImageView startImage =(ImageView)fragmentResult.findViewById(R.id.startImage);
+            startImage.setImageResource(R.mipmap.gh_search);
 
-                mTransaction = getFragmentManager().beginTransaction();
-                mTransaction.setCustomAnimations(R.anim.search_start, R.anim.result_exit);
-                mTransaction.replace(R.id.fragment, mFragmentStartSearch);
-                mTransaction.addToBackStack(null);
-                mTransaction.commit();
-            }
-        });
-        Bundle stringSearch = getArguments();
-        mStringSearch = stringSearch.getString("string");
-        mGithubRequest = new SampleRetrofitSpiceRequest(mStringSearch);
+        }
         return fragmentResult;
     }
 
@@ -128,10 +120,16 @@ public class FragmentResultLayout extends Fragment {
 
     @Override
     public void onStart() {
-        mResultProgressBar.setVisibility(View.VISIBLE);
+
         mSpiceManager.start(getActivity());
         super.onStart();
-        getmSpiceManager().execute(mGithubRequest, mStringSearch, DurationInMillis.ONE_DAY, new ListContributorRequestListener());
+        if (mBundleStringSearch != null) {
+            mResultProgressBar.setVisibility(View.VISIBLE);
+            getmSpiceManager().execute(mGithubRequest, mStringSearch, DurationInMillis.ONE_DAY, new ListContributorRequestListener());
+
+        } else {
+            mResultProgressBar.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -148,23 +146,31 @@ public class FragmentResultLayout extends Fragment {
      * @param result array json serialization object
      */
     private void updateContributors(Example result) {
-        ListView listView = (ListView) getActivity().findViewById(R.id.listView);
-        for (Item item : result.getItems()) {
-            mRepositoriesElements.add(new RepositoriesElement((item.stargazersCount).toString(), item.owner.avatarUrl, item.name, item.owner.login, item.htmlUrl));
-        }
-        final AdapterRepositories adapterRepositories;
-        adapterRepositories = new AdapterRepositories(getActivity(), mRepositoriesElements);
-        listView.setAdapter(adapterRepositories);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
-
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(adapterRepositories.getmURL()));
-                startActivity(browserIntent);
+        if (mBundleStringSearch != null) {
+            for (Item item : result.getItems()) {
+                mRepositoriesElements.add(new RepositoriesElement((item.stargazersCount).toString(), item.owner.avatarUrl, item.name, item.owner.login, item.htmlUrl));
             }
-        });
+            RecyclerView recList = (RecyclerView) getActivity().findViewById(R.id.cardList);
+            recList.setHasFixedSize(true);
+            if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+                recList.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+            }
+            else{
+                recList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            }
+
+            AdapterRepositories adapterRepositories = new AdapterRepositories(mRepositoriesElements);
+            recList.setAdapter(adapterRepositories);
+
+
+        }
+
+
     }
+
+
+
+
 
     /**
      * Processing successful and unsuccessful request.

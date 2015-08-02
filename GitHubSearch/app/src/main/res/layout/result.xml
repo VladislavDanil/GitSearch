@@ -3,39 +3,19 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:id="@+id/frame">
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cardList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:textSize="30sp"
-        android:text="@string/HeadResultLayout"
-        android:layout_marginTop="20dp"
-        android:gravity="center_horizontal" />
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="320dp"
-        android:id="@+id/listView"
-        android:layout_marginTop="10dp" />
-
-    <Button
-        android:layout_width="143dp"
-        android:layout_height="wrap_content"
-        android:text="@string/ButtonResultLayout"
-        android:id="@+id/resultb"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        style="@style/ButtonTheam"/>
-
-
-
+        android:layout_height="match_parent"
+        />
 </LinearLayout>
 
     <ProgressBar
@@ -44,4 +24,10 @@
         android:layout_height="134dp"
         android:id="@+id/result_progress_bar"
         android:layout_gravity="center" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/startImage"
+        android:scaleType="fitXY"/>
 </FrameLayout>

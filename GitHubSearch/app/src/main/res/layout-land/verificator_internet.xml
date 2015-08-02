@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:weightSum="1"
     style="@style/AppTheme"
-    android:background="@drawable/dialog">
+    android:background="@drawable/dialog_background">
 
     <TextView
         android:layout_width="match_parent"

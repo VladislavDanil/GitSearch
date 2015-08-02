@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="fon">#EF5350</color>
+    <color name="fon">#fafafa</color>
     <color name="text">#ffffffff</color>
     <color name="foneditetext">#ff000000</color>
     <color name="text_edite_text">#a9c0c918</color>
-    <color name="button_focused_color_start">#7FA40E</color>
-    <color name="button_focused_color_end">#79C83F</color>
     <color name="button_normal_color_start">#1f71df</color>
     <color name="button_normal_color_end">#619be9</color>
     <color name="button_pressed_color_start">#7FA40E</color>
     <color name="button_pressed_color_end">#79C83F</color>
+    <color name="color_stroke_button">#FFFFFF</color>
     <color name="color_text_button">#FFFFFF</color>
-    <color name="color_background_dialog">#BA68C8</color>
+    <color name="color_background_dialog">#2397F3</color>
     <color name="color_stroke_dialog">#FFFFFF</color>
     <color name="color_edite_text">#FFFFFF</color>
     <color name="color_stroke_edite_text">#619be9</color>
-    <color name="color_adapter">#00695C</color>
+    <color name="color_adapter">#2397F3</color>
     <color name="color_stroke_adapter">#FFFFFF</color>
 </resources>
