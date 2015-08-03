@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import ScansInternet.InternetDetecter;
 import adapter.AdapterRepositories;
 
+import com.example.nitrogenium.githubsearch.MainActivity;
 import com.example.nitrogenium.githubsearch.R;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -91,7 +92,7 @@ public class FragmentResultLayout extends Fragment {
         mResultProgressBar.setVisibility(View.INVISIBLE);
         mBundleStringSearch = getArguments();
         if (mBundleStringSearch != null) {
-            mStringSearch = mBundleStringSearch.getString("string");
+            mStringSearch = mBundleStringSearch.getString(MainActivity.STRING_BUNDLE_INDEX);
             mGithubRequest = new SampleRetrofitSpiceRequest(mStringSearch);
         } else {
             ImageView startImage =(ImageView)fragmentResult.findViewById(R.id.startImage);
@@ -125,7 +126,7 @@ public class FragmentResultLayout extends Fragment {
         super.onStart();
         if (mBundleStringSearch != null) {
             mResultProgressBar.setVisibility(View.VISIBLE);
-            getmSpiceManager().execute(mGithubRequest, mStringSearch, DurationInMillis.ONE_DAY, new ListContributorRequestListener());
+            getmSpiceManager().execute(mGithubRequest, mStringSearch, DurationInMillis.ONE_MINUTE, new ListContributorRequestListener());
 
         } else {
             mResultProgressBar.setVisibility(View.INVISIBLE);
@@ -147,7 +148,7 @@ public class FragmentResultLayout extends Fragment {
      */
     private void updateContributors(Example result) {
         if (mBundleStringSearch != null) {
-            for (Item item : result.getItems()) {
+            for (Item item : result.item) {
                 mRepositoriesElements.add(new RepositoriesElement((item.stargazersCount).toString(), item.owner.avatarUrl, item.name, item.owner.login, item.htmlUrl));
             }
             RecyclerView recList = (RecyclerView) getActivity().findViewById(R.id.cardList);

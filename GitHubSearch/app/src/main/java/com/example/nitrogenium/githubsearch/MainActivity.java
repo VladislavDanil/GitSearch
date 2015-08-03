@@ -25,6 +25,7 @@ import fragment.FragmentResultLayout;
  * @author Данилов Владислав
  */
 public class MainActivity extends ActionBarActivity implements SearchView.OnQueryTextListener {
+    public static final String STRING_BUNDLE_INDEX = "string";
     SearchView mSearchView;
     /**
      * ads fragment�layout result for further use in the transition
@@ -106,7 +107,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         } else {
             //forming a query string and transferring it by means of Bundle
             Bundle stringSearch = new Bundle();
-            stringSearch.putString("string", mSearchView.getQuery().toString());
+            stringSearch.putString(STRING_BUNDLE_INDEX, mSearchView.getQuery().toString());
             mFragmentResult = new FragmentResultLayout();
             mFragmentResult.setArguments(stringSearch);
             mTransaction = getSupportFragmentManager().beginTransaction();
