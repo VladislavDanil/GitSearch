@@ -65,6 +65,7 @@ public class FragmentResultLayout extends Fragment {
     /**
      * the query string
      */
+
     private String mStringSearch;
     /**
      * a container for storing the results of the query
@@ -148,7 +149,7 @@ public class FragmentResultLayout extends Fragment {
      */
     private void updateContributors(Example result) {
         if (mBundleStringSearch != null) {
-            for (Item item : result.item) {
+            for (Item item : result.getItems()) {
                 mRepositoriesElements.add(new RepositoriesElement((item.stargazersCount).toString(), item.owner.avatarUrl, item.name, item.owner.login, item.htmlUrl));
             }
             RecyclerView recList = (RecyclerView) getActivity().findViewById(R.id.cardList);

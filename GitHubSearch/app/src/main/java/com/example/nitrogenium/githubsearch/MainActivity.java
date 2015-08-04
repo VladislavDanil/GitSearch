@@ -1,21 +1,26 @@
 package com.example.nitrogenium.githubsearch;
 
-import android.app.Dialog;
+
+import android.content.Context;
+import android.database.AbstractCursor;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.Menu;
-
 import android.view.MenuItem;
-
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Locale;
 
 import fragment.FragmentResultLayout;
 
@@ -25,6 +30,7 @@ import fragment.FragmentResultLayout;
  * @author Данилов Владислав
  */
 public class MainActivity extends ActionBarActivity implements SearchView.OnQueryTextListener {
+
     public static final String STRING_BUNDLE_INDEX = "string";
     SearchView mSearchView;
     /**
@@ -48,40 +54,39 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         if (savedInstanceState == null) {
             mFragmentResult = new FragmentResultLayout();
             mTransaction = getSupportFragmentManager().beginTransaction();
-            mTransaction.setCustomAnimations(R.anim.start_app,0);
+            mTransaction.setCustomAnimations(R.anim.start_app, 0);
             mTransaction.replace(R.id.fragment, mFragmentResult);
             mTransaction.addToBackStack(null);
             mTransaction.commit();
+
         }
 
+        /**
+         * method allows you to go back when you press
+         @Override public void onBackPressed() {
+         final Dialog alertDialog = new Dialog(MainActivity.this);
+         alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+         final LinearLayout alertDialogCust = (LinearLayout) getLayoutInflater()
+         .inflate(R.layout.alert_dialog_main, null);
+         alertDialog.setContentView(alertDialogCust);
+         Button yes = (Button) alertDialogCust.findViewById(R.id.yes);
+         Button not = (Button) alertDialogCust.findViewById(R.id.not);
+         yes.setOnClickListener(new View.OnClickListener() {
+         @Override public void onClick(View v){
+         MainActivity.this.finish();
+         }
+         });
+         not.setOnClickListener(new View.OnClickListener() {
+         public void onClick(View v) {
+         alertDialog.cancel();
+         }
+         });
+         alertDialog.show();
+         return;
+         }*/
+
+
     }
-
-    /**
-     * method allows you to go back when you press
-    @Override
-    public void onBackPressed() {
-            final Dialog alertDialog = new Dialog(MainActivity.this);
-            alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            final LinearLayout alertDialogCust = (LinearLayout) getLayoutInflater()
-                .inflate(R.layout.alert_dialog_main, null);
-            alertDialog.setContentView(alertDialogCust);
-            Button yes = (Button) alertDialogCust.findViewById(R.id.yes);
-            Button not = (Button) alertDialogCust.findViewById(R.id.not);
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                MainActivity.this.finish();
-            }
-        });
-        not.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                alertDialog.cancel();
-            }
-        });
-        alertDialog.show();
-        return;
-    }*/
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -92,10 +97,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
+
     public boolean onQueryTextChange(String text_new) {
         return true;
     }
@@ -106,6 +108,15 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
             Toast.makeText(getApplicationContext(), "Null Query", Toast.LENGTH_SHORT).show();
         } else {
             //forming a query string and transferring it by means of Bundle
+
+
+            //Создаем экземпляр SearchRecentSuggestions
+
+
+            SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                    SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
+            //Сохраняем запрос
+            suggestions.saveRecentQuery(mSearchView.getQuery().toString(), null);
             Bundle stringSearch = new Bundle();
             stringSearch.putString(STRING_BUNDLE_INDEX, mSearchView.getQuery().toString());
             mFragmentResult = new FragmentResultLayout();
@@ -119,5 +130,21 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         return true;
     }
 
-
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                //Вызываем поиск
+                onSearchRequested();
+                return true;
+            case R.id.clear_recent_suggestions:
+                //Очищаем историю
+                SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
+                        SuggestionProvider.AUTHORITY, SuggestionProvider.MODE);
+                suggestions.clearHistory();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
+

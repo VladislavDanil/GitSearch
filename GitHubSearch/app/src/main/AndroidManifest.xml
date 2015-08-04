@@ -15,7 +15,6 @@
         <service
             android:name="robospice.SampleRetrofitSpiceService"
             android:exported="false" />
-
         <activity
 
             android:name=".MainActivity"
@@ -24,7 +23,16 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"
+                />
         </activity>
+        <provider android:name=".SuggestionProvider"
+            android:authorities="com.example.nitrogenium.githubsearch.SuggestionProvider" />
     </application>
 
 </manifest>
