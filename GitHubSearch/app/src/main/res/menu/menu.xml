@@ -5,6 +5,8 @@
         android:icon="@android:drawable/ic_menu_search"
         sabd:showAsAction="always|collapseActionView"
         sabd:actionViewClass="android.support.v7.widget.SearchView" />
+    <item android:id="@+id/search_record"
+        android:title="search" />
     <item android:id="@+id/clear_recent_suggestions"
         android:title="Очистить историю" />
 </menu>

@@ -1,28 +1,20 @@
 package fragment;
 
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import ScansInternet.InternetDetecter;
 import adapter.AdapterRepositories;
 
-import com.example.nitrogenium.githubsearch.MainActivity;
+import com.example.nitrogenium.githubsearch.Main;
 import com.example.nitrogenium.githubsearch.R;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -36,8 +28,6 @@ import github.Example;
 import github.Item;
 import robospice.SampleRetrofitSpiceRequest;
 import robospice.SampleRetrofitSpiceService;
-
-import static com.example.nitrogenium.githubsearch.R.mipmap.gh_search;
 
 /**
  * It creates a fragment from result Layout
@@ -93,7 +83,7 @@ public class FragmentResultLayout extends Fragment {
         mResultProgressBar.setVisibility(View.INVISIBLE);
         mBundleStringSearch = getArguments();
         if (mBundleStringSearch != null) {
-            mStringSearch = mBundleStringSearch.getString(MainActivity.STRING_BUNDLE_INDEX);
+            mStringSearch = mBundleStringSearch.getString(Main.STRING_BUNDLE_INDEX);
             mGithubRequest = new SampleRetrofitSpiceRequest(mStringSearch);
         } else {
             ImageView startImage =(ImageView)fragmentResult.findViewById(R.id.startImage);
