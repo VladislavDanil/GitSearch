@@ -11,37 +11,37 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
 import com.example.nitrogenium.githubsearch.R;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
  * Class implements methods for testing and activates interenet in his absence.
+ *
  * @author Danilov Vladislav
  */
 public class InternetDetecter {
     /**
      * check the operation of the Internet
+     *
      * @param context the current context
      * @return positive or negative response
      */
-    public boolean hasConnection(Context context)
-    {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public boolean hasConnection(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
+        if (wifiInfo != null && wifiInfo.isConnected()) {
             return true;
         }
         wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
+        if (wifiInfo != null && wifiInfo.isConnected()) {
             return true;
         }
         wifiInfo = cm.getActiveNetworkInfo();
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
+        if (wifiInfo != null && wifiInfo.isConnected()) {
             return true;
         }
         internetConect(context);
@@ -50,13 +50,14 @@ public class InternetDetecter {
 
     /**
      * it displays a window with buttons to activate the Internet
+     *
      * @param context the current context
      */
-    public void internetConect(final Context context){
+    public void internetConect(final Context context) {
         final Dialog dialogConnect = new Dialog(context);
         dialogConnect.requestWindowFeature(Window.FEATURE_NO_TITLE);
         final LinearLayout alertDialogCust;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE );
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         alertDialogCust = (LinearLayout) inflater.inflate(R.layout.verificator_internet, null);
         dialogConnect.setContentView(alertDialogCust);
         Button wifi = (Button) alertDialogCust.findViewById(R.id.wifi);
@@ -64,7 +65,7 @@ public class InternetDetecter {
         Button exit = (Button) alertDialogCust.findViewById(R.id.exit_conect);
         wifi.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 WifiManager wifi = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
                 wifi.setWifiEnabled(true);
                 dialogConnect.cancel();
@@ -120,7 +121,7 @@ public class InternetDetecter {
 
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 dialogConnect.cancel();
             }
         });

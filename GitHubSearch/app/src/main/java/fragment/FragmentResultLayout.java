@@ -86,7 +86,7 @@ public class FragmentResultLayout extends Fragment {
             mStringSearch = mBundleStringSearch.getString(Main.STRING_BUNDLE_INDEX);
             mGithubRequest = new SampleRetrofitSpiceRequest(mStringSearch);
         } else {
-            ImageView startImage =(ImageView)fragmentResult.findViewById(R.id.startImage);
+            ImageView startImage = (ImageView) fragmentResult.findViewById(R.id.startImage);
             startImage.setImageResource(R.mipmap.gh_search);
 
         }
@@ -144,10 +144,9 @@ public class FragmentResultLayout extends Fragment {
             }
             RecyclerView recList = (RecyclerView) getActivity().findViewById(R.id.cardList);
             recList.setHasFixedSize(true);
-            if(getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 recList.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-            }
-            else{
+            } else {
                 recList.setLayoutManager(new GridLayoutManager(getActivity(), 2));
             }
 
@@ -159,9 +158,6 @@ public class FragmentResultLayout extends Fragment {
 
 
     }
-
-
-
 
 
     /**

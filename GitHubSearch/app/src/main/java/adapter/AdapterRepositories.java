@@ -2,26 +2,19 @@ package adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.example.nitrogenium.githubsearch.R;
 import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
-
-import fragment.FragmentResultLayout;
-
-import static android.support.v4.app.ActivityCompat.startActivity;
 
 /**
  * The realization object and methods of the adapter layout list_element,
@@ -29,7 +22,6 @@ import static android.support.v4.app.ActivityCompat.startActivity;
  *
  * @author Danilov Vladislav
  */
-
 
 
 public class AdapterRepositories extends RecyclerView.Adapter<AdapterRepositories.Repositories> {
@@ -42,7 +34,9 @@ public class AdapterRepositories extends RecyclerView.Adapter<AdapterRepositorie
      * image downloading, transformation, and caching manager
      */
     Picasso mPicasso;
-
+    /**
+     * implements a class containing the elements of the adapter
+     */
     RepositoriesElement mRepositoriesElement;
 
     public AdapterRepositories(ArrayList<RepositoriesElement> mObjects) {
@@ -54,6 +48,12 @@ public class AdapterRepositories extends RecyclerView.Adapter<AdapterRepositorie
         return mObjects.size();
     }
 
+    /**
+     * method initializes the elements of the adapter
+     *
+     * @param repositories current data repository
+     * @param i            the position of an object
+     */
     @Override
     public void onBindViewHolder(Repositories repositories, int i) {
         mRepositoriesElement = mObjects.get(i);
@@ -64,7 +64,8 @@ public class AdapterRepositories extends RecyclerView.Adapter<AdapterRepositorie
         repositories.mStarRating.setText(mRepositoriesElement.mStargazersCount);
         repositories.mStarView.setImageResource(R.mipmap.ic_star);
         repositories.mURL = mRepositoriesElement.mURL;
-        repositories.mListEl.setOnClickListener(new View.OnClickListener(){
+        repositories.mListEl.setOnClickListener(new View.OnClickListener() {
+            //позволяет переходить в браузер по нажатию на элемент
             public void onClick(View v) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mRepositoriesElement.mURL));
                 context.startActivity(browserIntent);
@@ -82,7 +83,7 @@ public class AdapterRepositories extends RecyclerView.Adapter<AdapterRepositorie
     }
 
 
-    public static class Repositories extends RecyclerView.ViewHolder{
+    public static class Repositories extends RecyclerView.ViewHolder {
         /**
          * link to a website of the repository
          */
@@ -98,7 +99,6 @@ public class AdapterRepositories extends RecyclerView.Adapter<AdapterRepositorie
         LayoutInflater mInflater;
 
 
-
         public String getmURL() {
             return mURL;
         }
@@ -110,7 +110,13 @@ public class AdapterRepositories extends RecyclerView.Adapter<AdapterRepositorie
         ImageView mStarView;
         RelativeLayout mListEl;
 
-        public Repositories (View v) {
+
+        /**
+         * constructor provides a brief list of the contents of the adapter
+         *
+         * @param v the current context
+         */
+        public Repositories(View v) {
             super(v);
             mNameRepositories = ((TextView) v.findViewById(R.id.name_repositories));
             mLogin = ((TextView) v.findViewById(R.id.login));
