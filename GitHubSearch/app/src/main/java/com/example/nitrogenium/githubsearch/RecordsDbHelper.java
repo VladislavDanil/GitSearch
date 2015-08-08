@@ -129,6 +129,12 @@ public class RecordsDbHelper {
         }
     }
 
+    public void dropBase(){
+        mDb = mDbHelper.getWritableDatabase();
+        ContentValues initialValues = new ContentValues();
+        mDb.execSQL("DROP TABLE IF EXISTS records");
+        mDb.execSQL(DATABASE_CREATE);
+    }
     public RecordsDbHelper(Context context) {
         mDbHelper = new DatabaseHelper(context);
     }

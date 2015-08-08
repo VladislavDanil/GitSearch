@@ -16,4 +16,5 @@
     <color name="color_stroke_edite_text">#619be9</color>
     <color name="color_adapter">#2397F3</color>
     <color name="color_stroke_adapter">#FFFFFF</color>
+    <color name="color_stroke_sercheble">#ff2c73ff</color>
 </resources>

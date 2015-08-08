@@ -160,6 +160,10 @@ public class Main extends ActionBarActivity implements SearchView.OnQueryTextLis
                 onSearchRequested();
 
                 return true;
+            case R.id.delete_search:
+                mDbHelper.dropBase();
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
