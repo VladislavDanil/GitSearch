@@ -20,6 +20,10 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -31,10 +35,9 @@
         </activity>
 
         <provider android:name=".SuggestionProvider"
-            android:authorities="com.example.search.SuggestionProvider" />
-
-        <meta-data android:name="android.app.default_searchable"
-            android:value=".Main" />
+            android:authorities="com.example.search.SuggestionProvider"
+            android:exported="true"
+            android:multiprocess="true"/>
 
     </application>
 

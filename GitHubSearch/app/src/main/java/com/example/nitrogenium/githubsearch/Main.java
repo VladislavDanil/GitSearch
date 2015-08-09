@@ -1,12 +1,16 @@
 package com.example.nitrogenium.githubsearch;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.view.Menu;
@@ -19,14 +23,17 @@ import fragment.FragmentResultLayout;
  *
  * @author Данилов Владислав
  */
-public class Main extends ActionBarActivity implements SearchView.OnQueryTextListener {
+public class Main extends ActionBarActivity implements SearchView.OnQueryTextListener, SearchView.OnSuggestionListener {
     private RecordsDbHelper mDbHelper;
+    private Intent intent;
     public static final String STRING_BUNDLE_INDEX = "string";
     SearchView mSearchView;
     /**
      * ads fragment�layout result for further use in the transition
      */
     Fragment mFragmentResult;
+    // At the top of your class
+    private Menu mMenu;
     /**
      * variable declaration for the transition between fragments FragmentTransaction
      */
@@ -43,6 +50,9 @@ public class Main extends ActionBarActivity implements SearchView.OnQueryTextLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_layout);
+        mDbHelper = new RecordsDbHelper(this);
+        intent = getIntent();
+        intent.getAction();
         if (savedInstanceState == null) {
             mFragmentResult = new FragmentResultLayout();
             mTransaction = getSupportFragmentManager().beginTransaction();
@@ -52,24 +62,11 @@ public class Main extends ActionBarActivity implements SearchView.OnQueryTextLis
             mTransaction.commit();
 
         }
-        mDbHelper = new RecordsDbHelper(this);
 
-        //Получаем Intent
-        Intent intent = getIntent();
+
+        /*
         //Проверяем тип Intent
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            saveTask(query);
-            Bundle stringSearch = new Bundle();
-            stringSearch.putString(STRING_BUNDLE_INDEX, query);
-            mFragmentResult = new FragmentResultLayout();
-            mFragmentResult.setArguments(stringSearch);
-            mTransaction = getSupportFragmentManager().beginTransaction();
-            mTransaction.setCustomAnimations(R.anim.left, R.anim.right);
-            mTransaction.replace(R.id.fragment, mFragmentResult);
-            mTransaction.addToBackStack(null);
-            mTransaction.commit();
-        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             Uri uri = intent.getData();
             Cursor cursor = managedQuery(uri, null, null, null, null);
             cursor.moveToFirst();
@@ -83,7 +80,7 @@ public class Main extends ActionBarActivity implements SearchView.OnQueryTextLis
             mTransaction.replace(R.id.fragment, mFragmentResult);
             mTransaction.addToBackStack(null);
             mTransaction.commit();
-        }
+        }*/
 
         /**
          * method allows you to go back when you press
@@ -115,6 +112,17 @@ public class Main extends ActionBarActivity implements SearchView.OnQueryTextLis
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        this.mMenu = menu;
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        mSearchView.setQueryHint("Поиск");
+        mSearchView.setOnQueryTextListener(this);
+        mSearchView.setOnSuggestionListener(this);
+        mSearchView.setIconifiedByDefault(false);
         return true;
     }
 
@@ -127,9 +135,9 @@ public class Main extends ActionBarActivity implements SearchView.OnQueryTextLis
         if (query == null) {
             Toast.makeText(getApplicationContext(), "Null Query", Toast.LENGTH_SHORT).show();
         } else {
+            Cursor cursor = managedQuery(SuggestionProvider.CONTENT_URI, null, null,
+                    new String[] {mSearchView.getQuery().toString()}, null);
             saveTask(mSearchView.getQuery().toString());
-            //forming a query string and transferring it by means of Bundle
-            //Создаем экземпляр SearchRecentSuggestions
             Bundle stringSearch = new Bundle();
             stringSearch.putString(STRING_BUNDLE_INDEX, mSearchView.getQuery().toString());
             mFragmentResult = new FragmentResultLayout();
@@ -139,6 +147,9 @@ public class Main extends ActionBarActivity implements SearchView.OnQueryTextLis
             mTransaction.replace(R.id.fragment, mFragmentResult);
             mTransaction.addToBackStack(null);
             mTransaction.commit();
+            mSearchView.clearFocus();
+            mSearchView.setFocusable(false);
+            mSearchView.onActionViewCollapsed();
         }
 
         return true;
@@ -149,25 +160,52 @@ public class Main extends ActionBarActivity implements SearchView.OnQueryTextLis
     }
 
     /**
-     * method calls the search string
+     * click on the menu item clears the cache
      *
      * @param item it contains elements of the current menu
      * @return recursive call
      */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
-                onSearchRequested();
-
-                return true;
             case R.id.delete_search:
                 mDbHelper.dropBase();
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    @Override
+    public boolean onSuggestionSelect(int position) {
+        return false;
+    }
+
+
+    @Override
+    public boolean onSuggestionClick(int position) {
+
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            Uri uri = getIntent().getData();
+            Cursor cursor = managedQuery(uri, null, null, null, null);
+            if (cursor == null) {
+                finish();
+            } else {
+                cursor.moveToFirst();
+                int rIndex = cursor.getColumnIndexOrThrow(RecordsDbHelper.KEY_DATA);
+                Bundle stringSearch = new Bundle();
+                stringSearch.putString(STRING_BUNDLE_INDEX, cursor.getString(rIndex));
+                mFragmentResult = new FragmentResultLayout();
+                mFragmentResult.setArguments(stringSearch);
+                mTransaction = getSupportFragmentManager().beginTransaction();
+                mTransaction.setCustomAnimations(R.anim.left, R.anim.right);
+                mTransaction.replace(R.id.fragment, mFragmentResult);
+                mTransaction.addToBackStack(null);
+                mTransaction.commit();
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 }
 
