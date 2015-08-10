@@ -13,16 +13,16 @@ public class SuggestionProvider extends ContentProvider {
 
     private RecordsDbHelper mDbHelper;
 
-    public static String AUTHORITY = "com.example.search.SuggestionProvider";
+    public static String AUTHORITY = "com.example.nitrogenium.githubsearch.SuggestionProvider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/records");
 
-    //MIME типы для getType()
+    //MIME пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ getType()
     public static final String RECORDS_MIME_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE +
-            "/vnd.example.search";
+            "/vnd.com.example.nitrogenium.githubsearch";
     public static final String RECORD_MIME_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE +
-            "/vnd.example.search";
+            "/vnd.com.example.nitrogenium.githubsearch";
 
-    //Для матчера разных URI
+    //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ URI
     private static final int SEARCH_RECORDS = 0;
     private static final int GET_RECORD = 1;
     private static final int SEARCH_SUGGEST = 2;
@@ -43,7 +43,7 @@ public class SuggestionProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
-        //Используем UriMatcher, чтобы узнать какой тип запроса получен. Далее формируем соответствующий запрос к БД
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ UriMatcher, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ
         switch (sURIMatcher.match(uri)) {
             case SEARCH_SUGGEST:
                 if (selectionArgs == null) {
@@ -96,16 +96,16 @@ public class SuggestionProvider extends ContentProvider {
      */
     private static UriMatcher makeUriMatcher() {
         UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        // Для записей
+        // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         matcher.addURI(AUTHORITY, "records", SEARCH_RECORDS);
         matcher.addURI(AUTHORITY, "records/#", GET_RECORD);
-        // Для подсказок
+        // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
         matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCH_SUGGEST);
         return matcher;
     }
 
-    //Требуемые методы (наследуются от класса ContentProvider)
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ContentProvider)
     @Override
     public String getType(Uri uri) {
         switch (sURIMatcher.match(uri)) {

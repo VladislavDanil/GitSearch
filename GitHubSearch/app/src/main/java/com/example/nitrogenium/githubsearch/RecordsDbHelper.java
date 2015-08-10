@@ -17,7 +17,7 @@ import android.util.Log;
  */
 public class RecordsDbHelper {
 
-    //Единственный столбец в таблице - данные
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ
     public static final String KEY_DATA = SearchManager.SUGGEST_COLUMN_TEXT_1;
 
     private static final String TAG = "RecordsDbHelper";
@@ -28,7 +28,7 @@ public class RecordsDbHelper {
     private static final String DATABASE_TABLE = "records";
     private static final int DATABASE_VERSION = 2;
 
-    //Сценарий создания БД
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
     private static final String DATABASE_CREATE =
             "CREATE VIRTUAL TABLE " + DATABASE_TABLE +
                     " USING fts3 (" + KEY_DATA + ");";
@@ -147,9 +147,16 @@ public class RecordsDbHelper {
      */
     public long createRecord(String data) {
         mDb = mDbHelper.getWritableDatabase();
+        mDb = mDbHelper.getReadableDatabase();
         ContentValues initialValues = new ContentValues();
-        initialValues.put(KEY_DATA, data);
-        return mDb.insert(DATABASE_TABLE, null, initialValues);
+        String selection = "suggest_text_1 LIKE ?";
+        String[] selectionArgs = new String[] { data };
+        Cursor cursor = mDb.query(DATABASE_TABLE, null, selection, selectionArgs, null, null, null );
+        if(cursor.getCount()==0) {
+            initialValues.put(KEY_DATA, data);
+            return mDb.insertWithOnConflict(DATABASE_TABLE, null, initialValues, SQLiteDatabase.CONFLICT_REPLACE);
+        }
+        return 0;
     }
 
 }

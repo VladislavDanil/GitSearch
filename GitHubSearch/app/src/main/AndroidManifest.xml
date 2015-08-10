@@ -35,7 +35,7 @@
         </activity>
 
         <provider android:name=".SuggestionProvider"
-            android:authorities="com.example.search.SuggestionProvider"
+            android:authorities="com.example.nitrogenium.githubsearch.SuggestionProvider"
             android:exported="true"
             android:multiprocess="true"/>
 

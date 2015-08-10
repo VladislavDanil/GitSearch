@@ -135,8 +135,6 @@ public class Main extends ActionBarActivity implements SearchView.OnQueryTextLis
         if (query == null) {
             Toast.makeText(getApplicationContext(), "Null Query", Toast.LENGTH_SHORT).show();
         } else {
-            Cursor cursor = managedQuery(SuggestionProvider.CONTENT_URI, null, null,
-                    new String[] {mSearchView.getQuery().toString()}, null);
             saveTask(mSearchView.getQuery().toString());
             Bundle stringSearch = new Bundle();
             stringSearch.putString(STRING_BUNDLE_INDEX, mSearchView.getQuery().toString());
@@ -183,17 +181,16 @@ public class Main extends ActionBarActivity implements SearchView.OnQueryTextLis
 
     @Override
     public boolean onSuggestionClick(int position) {
-
-        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            Uri uri = getIntent().getData();
-            Cursor cursor = managedQuery(uri, null, null, null, null);
+        Uri CONTENT_URI = Uri.parse("content://com.example.nitrogenium.githubsearch.SuggestionProvider/records/"+(position+1));
+            Cursor cursor = managedQuery(CONTENT_URI, null, null, null,
+                    null);
             if (cursor == null) {
                 finish();
             } else {
-                cursor.moveToFirst();
                 int rIndex = cursor.getColumnIndexOrThrow(RecordsDbHelper.KEY_DATA);
                 Bundle stringSearch = new Bundle();
                 stringSearch.putString(STRING_BUNDLE_INDEX, cursor.getString(rIndex));
+                cursor.close();
                 mFragmentResult = new FragmentResultLayout();
                 mFragmentResult.setArguments(stringSearch);
                 mTransaction = getSupportFragmentManager().beginTransaction();
@@ -202,9 +199,8 @@ public class Main extends ActionBarActivity implements SearchView.OnQueryTextLis
                 mTransaction.addToBackStack(null);
                 mTransaction.commit();
                 return true;
+
             }
-            return false;
-        }
         return false;
     }
 }
